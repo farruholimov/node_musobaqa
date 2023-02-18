@@ -92,7 +92,7 @@ export default class UsersDAO {
         "users.created_at",
         'master.id as master_id'
       ])
-      .innerJoin({master: "masters"}, {"users.user_id": "master.id"})
+      .leftJoin({master: "masters"}, {"users.user_id": "master.id"})
       .groupBy('users.user_id', 'master.id')
       .where({ chat_id: chat_id}) 
       .first();

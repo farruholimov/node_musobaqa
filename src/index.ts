@@ -1,13 +1,15 @@
+import { createCalendar } from './app/modules/shared/utils/createCalendar';
 import jimi from './bot/bot';
 import http from 'http';
-import App from "./app/server"; 
+import App from './app/server';
 
-const ExpressApp = new App()
+const ExpressApp = new App();
+console.log(createCalendar('9:30', '18:30', '15'));
 
 const server = http.createServer(ExpressApp.getServer);
 
-jimi()
+// jimi();
 // _________LISTEN PORT___________
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5000;
 
-server.listen(port, () => console.log("Listening port on " + port))
+server.listen(port, () => console.log('Listening port on ' + port));

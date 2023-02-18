@@ -69,10 +69,7 @@ export default class UsersService {
 
     // const averageRating = totalRating / myRatings.length;
 
-    return {
-      ...user,
-      // rating: averageRating
-    }
+    return user
   } 
 
   async getById(id: string) {

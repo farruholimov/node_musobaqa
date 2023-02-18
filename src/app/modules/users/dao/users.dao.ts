@@ -8,6 +8,8 @@ export default class UsersDAO {
     full_name,
     longitude,
     latitude,
+    chat_id,
+    step,
     phone
   }: ICreateUser): Promise<IUser> {
     return getFirst(
@@ -16,6 +18,8 @@ export default class UsersDAO {
           full_name,
           longitude,
           latitude,
+          chat_id,
+          step,
           phone
         })
         .returning('*'),
@@ -93,10 +97,10 @@ export default class UsersDAO {
         "users.longitude", 
         "users.latitude", 
         "users.created_at",
-        'masters.id as master_id'
+        'master.id as master_id'
       ])
-      .innerJoin({master: "masters"}, {"users.user_id": "masters.id"})
-      .groupBy('users.user_id', 'masters.id')
+      .innerJoin({master: "masters"}, {"users.user_id": "master.id"})
+      .groupBy('users.user_id', 'master.id')
       .where({ chat_id: chat_id}) 
       .first();
   } 

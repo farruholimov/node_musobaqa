@@ -22,7 +22,7 @@ export async function up(knex: Knex): Promise<void> {
       longitude varchar, 
       latitude varchar,    
       chat_id varchar not null,
-      step int not null,
+      step varchar not null,
       created_at timestamp not null default current_timestamp,
       updated_at timestamp not null default current_timestamp
     );

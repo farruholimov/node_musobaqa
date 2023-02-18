@@ -1,0 +1,19 @@
+{
+  "name": "node_musobaqa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farruholimov/node_musobaqa.git"
+  },
+  "author": "Sudo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farruholimov/node_musobaqa/issues"
+  },
+  "homepage": "https://github.com/farruholimov/node_musobaqa#readme"
+}

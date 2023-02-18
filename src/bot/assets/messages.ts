@@ -1,9 +1,15 @@
-export default messages = {
+const messages = {
   startMsg: "Kerakli tilni tanlang \n Choose your language",
+  selectSectionMsg: "<b>Kerakli bo'limni tanlang:</b>",
     nameMsg: "👤 <b>Ro'yxatdan o'tish uchun ismigizni va familiyangizni kiriting:</b>",
     inputNameMsg: "👤 <b>Ismingizni kiriting:</b>",
-    telMsg: "☎️ <b>Telefon raqamingizni</b> yuboring:\n\nNamuna: <i>+998901234567</i>",
-    selectSectionMsg: "<b>Kerakli bo'limni tanlang:</b>",
+    phoneNumberMsg: "☎️ <b>Telefon raqamingizni</b> kiriting:\n\nNamuna: <i>+998901234567</i>",
+    brandMsg: "☎️ <b>Brendingiz nomini</b> kiriting:\n<i>Misol: Sudo</i>",
+    addressMsg: "☎️ <b>Manzilni</b> kiriting:\n<i>Misol: Shayxontohur tumani, Navoiy ko'chasi</i>",
+    addressTargetMsg: "☎️ <b>Manzil mo'ljalini</b> kiriting:\n<i>Misol: IIB ro'parasi</i>",
+    locationMsg: "☎️ <b>Xaritada joylashuvingizni</b> (lokatsiya) jo'nating:\n<i>Telegramning joylashuv ulashish imkoniyati orqali</i>",
+    workTimeMsg: (text: string, exp: string) => `☎️ <b>Ish ${text}</b> vaqtini jo'nating:\n<i>Misol: ${exp}</i>`,
+    durationMsg: "☎️ <b>Bir mijoz uchun sarflaydigan o'rtacha vaqtingizni daqiqalarda*</b> kiriting:\n<i>Misol:\n<b>80</b> (1 soat 20 daqiqa)\n<b>20</b> (20 daqiqa)</i>",
     incTelMsg: "❗️ Iltimos raqamni to'gri kiriting!",
     regSuccessMsg: "✅ Ro'yhatdan muvaffaqiyatli o'tdingiz!",
     orderFirstStep: "<b>Quyidagi saytdan kerakli mahsulotning rasmini (screenshot) yoki linkini yuboring.</b> \n----------------------------------------------------------------------\n 👉 https://telegra.ph/Aksessuarlar-03-07 👈\n----------------------------------------------------------------------\n\n<i>Mahsulotlarni yuborganingizdan so'ng davom etish uchun <b>Tasdiqlash</b> tugmasini bosing yoki buyurtma berishni to'xtatish uchun <b>Bekor qilish</b> tugmasini bosing.</i>",
@@ -56,3 +62,5 @@ export default messages = {
       "3": "Hozirgi buyurtmangizga qilingan to'lov hali tasdiqlanmadi!"
     }
 }
+
+export default messages

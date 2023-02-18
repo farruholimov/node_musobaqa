@@ -3,13 +3,36 @@
 import { InlineKeyboard } from "grammy";
 
 const InlineKeyboards = {
+    
+        verify_info: new InlineKeyboard()
+            .text("Tasdiqlash", "send_info")
+            .text("Bekor qilish", "cancel_register_proccess"),
+
+        waiting_menu: new InlineKeyboard()
+            .text("Tekshirish", "check_register_status")
+            .text("Bekor qilish", "cancel_register")
+            .row()
+            .text("Admin bilan bog'lanish", "contact_admin"),
+
+        user_menu: new InlineKeyboard()
+            .text("Mijozlar", "clients_menu")
+            .text("Vaqt", "time_menu")
+            .text("Reyting", "rating_menu")
+            .row()
+            .text("Ma'lumotlarni o'zgartirish", "edit_user_info"),
 
         user_type_menu: new InlineKeyboard()
             .text("Usta", "set_user_type?type=usta")
             .text("Mijoz", "set_user_type?type=mijoz"),
 
-        set_cost: new InlineKeyboard()
-            .text("Narx belgilash", "set_cost"),
+        days_menu: new InlineKeyboard()
+            .text("Dushanba", "select_day?day=mon")
+            .text("Seshanba", "select_day?day=tue")
+            .text("Chorshanba", "select_day?day=wed")
+            .text("Payshanba", "select_day?day=thurs")
+            .text("Juma", "select_day?day=fri")
+            .text("Shanba", "select_day?day=sat")
+            .text("Yakshanba", "select_day?day=sun"),
 
         menu_switch: (offset, step) => new InlineKeyboard()
             .text("◀️", `prev?offset=${Number(offset) - 1}`)
@@ -33,23 +56,6 @@ const InlineKeyboards = {
             }
             return menu
         },
-
-
-        amount_menu: (item_id) =>
-            new InlineKeyboard()
-            .text("1", `set_amount?value=1&item_id=${item_id}`)
-            .text("2", `set_amount?value=2&item_id=${item_id}`)
-            .text("3", `set_amount?value=3&item_id=${item_id}`)
-            .text("4", `set_amount?value=4&item_id=${item_id}`)
-            .text("5", `set_amount?value=5&item_id=${item_id}`)
-            .row()
-            .text("6", `set_amount?value=6&item_id=${item_id}`)
-            .text("7", `set_amount?value=7&item_id=${item_id}`)
-            .text("8", `set_amount?value=8&item_id=${item_id}`)
-            .text("9", `set_amount?value=9&item_id=${item_id}`)
-            .text("10", `set_amount?value=10&item_id=${item_id}`)
-            .row()
-            .text("Boshqa", `manual_amount?item_id=${item_id}`),
 
         edit_item_menu: (item_id) =>
             new InlineKeyboard()

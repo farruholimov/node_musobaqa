@@ -89,6 +89,6 @@ export default class UsersService {
   }
 
   async updateByChatId(chatId: string, values: IUpdateUser) {
-    return this.usersDao.update(chatId, values);
+    return this.usersDao.updateByChatId(chatId, values);
   }
 }

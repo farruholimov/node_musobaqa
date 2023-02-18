@@ -90,6 +90,7 @@ export default class UsersDAO {
         "users.longitude", 
         "users.latitude", 
         "users.created_at",
+        "users.role_id",
         'master.id as master_id'
       ])
       .leftJoin({master: "masters"}, {"users.user_id": "master.id"})

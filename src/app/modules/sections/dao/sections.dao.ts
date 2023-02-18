@@ -27,13 +27,7 @@ export default class SectionsDAO {
     );
   }
 
-  async getAll(key: string, keyword: string, filters, sorts) {
-    const {limit, offset, order, orderBy} = sorts
-    return await KnexService('sections') 
-      .limit(limit)
-      .offset(offset)
-      .orderBy(`sections.${orderBy}`, order)
-      .whereILike(`sections.${key}`, `%${keyword}%`)
-      .andWhere(filters) 
+  async getAll() { 
+    return await KnexService('sections')   
   } 
 }

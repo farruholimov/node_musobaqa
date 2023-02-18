@@ -27,14 +27,14 @@ export default class CalendarsService {
     return this.calendarsDao.update(id, values);
   }
 
-  getAll(key: string, keyword: string, query) {
+  getAll( query) {
 
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  
     const sorts = extractedQuery.sorts 
 
-    return this.calendarsDao.getAll(key, keyword, filters, sorts);
+    return this.calendarsDao.getAll( filters, sorts);
   } 
  
 }

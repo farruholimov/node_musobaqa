@@ -35,13 +35,12 @@ export default class CalendarDAO {
     );
   }
 
- async  getAll(key: string, keyword: string, filters, sorts) {
+ async  getAll( filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
     return await KnexService('calendars') 
       .limit(limit)
       .offset(offset)
-      .orderBy(`calendars.${orderBy}`, order)
-      .whereILike(`calendars.${key}`, `%${keyword}%`)
+      .orderBy(`calendars.${orderBy}`, order) 
       .andWhere(filters) 
   } 
  

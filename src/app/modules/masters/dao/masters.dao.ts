@@ -44,7 +44,7 @@ export default class MastersDAO {
     );
   }
 
-  async getAll(key: string, keyword: string, filters, sorts) {
+  async getAll( filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
     return await KnexService('masters')
       .select([
@@ -60,8 +60,7 @@ export default class MastersDAO {
       ]) 
       .limit(limit)
       .offset(offset)
-      .orderBy(`masters.${orderBy}`, order)
-      .whereILike(`masters.${key}`, `%${keyword}%`)
+      .orderBy(`masters.${orderBy}`, order) 
       .andWhere(filters) 
   }
 

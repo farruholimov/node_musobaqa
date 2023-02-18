@@ -32,14 +32,14 @@ export default class MastersService {
     return this.mastersDao.update(user_id, values);
   }
 
-  getAll(key: string, keyword: string, query) {
+  getAll (query) {
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  
     const sorts = extractedQuery.sorts 
 
 
-    return this.mastersDao.getAll(key, keyword, filters, sorts);
+    return this.mastersDao.getAll( filters, sorts);
   } 
 
   verifyMaster(id: string) {

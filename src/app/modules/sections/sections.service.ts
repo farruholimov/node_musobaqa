@@ -16,7 +16,7 @@ export default class SectionsService {
     return await this.sectionsDao.update(id, values);
   }
 
-  async getAll(key: string, keyword: string, filters, sorts) {
-    return await this.sectionsDao.getAll(key, keyword, filters, sorts);
+  async getAll( ) {
+    return await this.sectionsDao.getAll( );
   }  
 }

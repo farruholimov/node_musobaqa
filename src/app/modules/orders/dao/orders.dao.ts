@@ -35,7 +35,7 @@ export default class OrdersDAO {
     );
   }
 
- async getAll(key: string, keyword: string, filters, sorts) {
+ async getAll( filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
     return await KnexService('orders') 
       .from('orders')
@@ -62,8 +62,7 @@ export default class OrdersDAO {
       .innerJoin('calendar', 'calendar.id', 'orders.calendar_id')
       .limit(limit)
       .offset(offset)
-      .orderBy(`orders.${orderBy}`, order)
-      .whereILike(`orders.${key}`, `%${keyword}%`)
+      .orderBy(`orders.${orderBy}`, order) 
       .andWhere(filters) 
       .groupBy('orders.id', 'users.user_id', 'masters.id', 'calendars.id')
   }  

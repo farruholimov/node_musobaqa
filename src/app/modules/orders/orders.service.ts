@@ -26,14 +26,14 @@ async create({
     return await this.ordersDao.update(id, values);
   }
 
-  async getAll(key: string, keyword: string, query) {
+  async getAll( query?) {
 
     const extractedQuery = extractQuery(query)
-    const filters = extractedQuery.filters  
+    const filters = extractedQuery.filters 
  
     const sorts = extractedQuery.sorts 
 
-    return await this.ordersDao.getAll(key, keyword, filters, sorts);
+    return await this.ordersDao.getAll(filters, sorts);
   } 
  
 }

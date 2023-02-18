@@ -1,5 +1,4 @@
-import { Knex } from 'knex';
-import { isEmpty } from 'lodash';
+import { Knex } from 'knex'; 
 import KnexService from '../../../database/connection';
 import { getFirst } from '../../shared/utils/utils';
 import { ICreateUser, IUpdateUser, IUser } from '../interface/users.interface';
@@ -7,17 +6,17 @@ import { ICreateUser, IUpdateUser, IUser } from '../interface/users.interface';
 export default class UsersDAO {
   async create({
     full_name,
-    email,
-    password,
-    language_id,
+    longitude,
+    latitude,
+    phone
   }: ICreateUser): Promise<IUser> {
     return getFirst(
       await KnexService('users')
         .insert({
           full_name,
-          password,
-          email,
-          language_id,
+          longitude,
+          latitude,
+          phone
         })
         .returning('*'),
     );
@@ -40,8 +39,9 @@ export default class UsersDAO {
       .select([
         "users.user_id",
         "users.full_name",
-        "users.email",
-        "users.is_verified",
+        "users.phone", 
+        "users.longitude", 
+        "users.latitude", 
         "users.created_at",
         "name as role",
       ])
@@ -67,28 +67,15 @@ export default class UsersDAO {
       .first();
   }
 
-  getByEmail(email: string) {
+  getByPhone(phone: string) {
     return KnexService('users')
-      .where({ email: email})
+      .where({ phone: phone})
       .first();
-  }
+  } 
 
-  getVerifiedByEmail(email: string) {
+  getByChatId(chat_id: string) {
     return KnexService('users')
-      .where({ email: email, is_verified: true })
+      .where({ chat_id: chat_id})
       .first();
-  }
-
-  getUnverifiedByEmail(email: string) {
-    return KnexService('users')
-      .where({ email: email, is_verified: false })
-      .first();
-  }
-
-  verify(id: string) {
-    return KnexService('users')
-      .update({ is_verified: true })
-      .where('user_id', id)
-      .returning('*');
-  }
+  } 
 }

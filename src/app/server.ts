@@ -1,13 +1,14 @@
 import cors from "cors";
 import express, { Express, Router } from 'express';
 import errorHandler from "./modules/shared/middlewares/errorHandler"; 
-import path from "path";
+import path from "path"; 
 
 class App {
   public app: Express;
 
   constructor() {
     this.app = express();
+     
 
     this.initializeMiddlewares(); 
     this.initializeErrorHandling();
@@ -22,7 +23,7 @@ class App {
  
   private initializeErrorHandling() {
     this.app.use(errorHandler);
-  }
+  } 
 
 }
 

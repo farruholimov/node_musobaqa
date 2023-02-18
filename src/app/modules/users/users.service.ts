@@ -1,43 +1,83 @@
+import { ICreateMaster } from './../masters/interface/masters.interface';
+import MastersService from '../masters/masters.service';
 import UsersDAO from './dao/users.dao';
 import { ICreateUser, IUpdateUser } from './interface/users.interface';
+import ErrorResponse from '../shared/utils/errorResponse';
+import UserRoleService from './user_roles/user_roles.service';
 
-export default class {
+export default class UsersService {
   private usersDao = new UsersDAO();
+  private mastersService = new MastersService();
+  private userRolesService = new UserRoleService()
 
-  create({ full_name, email, password, language_id }: ICreateUser) {
+  async registerUser({ full_name, phone, latitude, longitude, chat_id, step, role_id }: ICreateUser) {
 
-    return this.usersDao.create({
+    const user = await this.getByChatId(chat_id);
+    
+    if(user) {
+      return user;
+    }
+
+    const new_user = await this.usersDao.create({
       full_name,
-      language_id,
-      email,
-      password,
+      longitude,
+      phone,
+      latitude,
+      chat_id,
+      step
     });
+
+    const role = await this.userRolesService.create({
+      role_id: Number(role_id),
+      user_id: new_user.user_id
+    });
+
+    return new_user
   }
 
-  update(id: string, values: IUpdateUser) {
+  async update(id: string, values: IUpdateUser) {
     return this.usersDao.update(id, values);
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+  async getAll(key: string, keyword: string, filters, sorts) {
     return this.usersDao.getAll(key, keyword, filters, sorts);
   }
 
-  getByEmail(email: string) {
-    return this.usersDao.getByEmail(email);
-  }
+  async getByPhone(phone: string) {
+    return this.usersDao.getByPhone(phone);
+  } 
 
-  getVerifiedByEmail(email: string) {
-    return this.usersDao.getVerifiedByEmail(email);
-  }
+  async getByChatId(chatId: string) {
+    return this.usersDao.getByChatId(chatId);
+  } 
 
-  getUnverifiedByEmail(email: string) {
-    return this.usersDao.getUnverifiedByEmail(email);
-  }
-
-  getById(id: string) {
+  async getById(id: string) {
     return this.usersDao.getById(id);
-  }
-  verify(id: string) {
-    return this.usersDao.verify(id);
+  } 
+
+  async registerMaster(data) {
+      const { full_name, phone, latitude, longitude, chat_id, step, role_id }: ICreateUser = data;
+      const { brand_name,  address, average_time, target, start_time, end_time,  section_id }: ICreateMaster = data;
+
+      const user = await this.getByPhone(phone);
+
+      if(user) throw new ErrorResponse(400, 'User already exists!');
+
+      const new_user = await this.registerUser({full_name, phone, latitude, longitude, chat_id, step});
+
+      const master = await this.mastersService.create({
+        brand_name,  address, average_time, target, start_time, end_time, section_id, user_id: new_user.user_id
+      })
+
+      const role = await this.userRolesService.create({
+        role_id: Number(role_id),
+        user_id: new_user.user_id
+      });
+      
+      return {
+        ...new_user,
+        master
+      }
+
   }
 }

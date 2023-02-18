@@ -1,5 +1,4 @@
-import { defaults } from "../../shared/defaults/defaults";
-
+ 
 export function getFirst(v: any[]) {
   return v[0];
 }
@@ -26,9 +25,4 @@ export function getDateByValue(date: number | Date) {
 
 export function getCurrentDate() {
   return Date.now();
-}
-
-export function generateRangesArray(value: string) {
-  const splitted = value.split(defaults.rangeSplitter)
-  return [Number(splitted[0]), Number(splitted[1])];
-}
+}  

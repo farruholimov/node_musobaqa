@@ -10,7 +10,8 @@ export default class UsersDAO {
     latitude,
     chat_id,
     step,
-    phone
+    phone,
+    role_id
   }: ICreateUser): Promise<IUser> {
     return getFirst(
       await KnexService('users')
@@ -20,7 +21,8 @@ export default class UsersDAO {
           latitude,
           chat_id,
           step,
-          phone
+          phone,
+          role_id
         })
         .returning('*'),
     );
@@ -58,22 +60,13 @@ export default class UsersDAO {
         "users.longitude", 
         "users.latitude", 
         "users.created_at",
-        "name as role",
-      ])
-      .innerJoin(function(){
-        this.select(["user_roles.id", "user_roles.user_id", "role_id", "name"])
-        .from("user_roles")
-        .as("user_roles")
-        .leftJoin({role: "roles"}, {"user_roles.role_id": "role.id"})
-        .whereNot("role_id", 1)
-        .groupBy("user_roles.id", "role.id")
-      }, {"users.user_id": "user_roles.user_id"})
+        "users.role_id", 
+      ]) 
       .limit(limit)
       .offset(offset)
       .orderBy(`users.${orderBy}`, order)
       .whereILike(`users.${key}`, `%${keyword}%`)
-      .andWhere(filters)
-      .groupBy("users.user_id", "user_roles.id", "user_roles.user_id", "name")
+      .andWhere(filters) 
   }
 
   async getById(id: string) {

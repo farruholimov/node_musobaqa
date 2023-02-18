@@ -85,8 +85,19 @@ export default class UsersDAO {
   } 
 
   getByChatId(chat_id: string) {
-    return KnexService('users')
-      .where({ chat_id: chat_id})
+    return KnexService('users') 
+      .select([
+        "users.user_id",
+        "users.full_name",
+        "users.phone", 
+        "users.longitude", 
+        "users.latitude", 
+        "users.created_at",
+        'masters.id as master_id'
+      ])
+      .innerJoin({master: "masters"}, {"users.user_id": "masters.id"})
+      .groupBy('users.user_id', 'masters.id')
+      .where({ chat_id: chat_id}) 
       .first();
   } 
 }

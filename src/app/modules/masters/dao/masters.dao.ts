@@ -1,3 +1,4 @@
+import { ICreateRating } from './../interface/masters.interface';
 import { Knex } from 'knex'; 
 import KnexService from '../../../database/connection';
 import { getFirst } from '../../shared/utils/utils';
@@ -13,8 +14,7 @@ export default class MastersDAO {
     end_time,
     is_verified,
     section_id,
-    user_id,
-    rating
+    user_id, 
   }: ICreateMaster): Promise<IMaster> {
     return getFirst(
       await KnexService('masters')
@@ -27,8 +27,7 @@ export default class MastersDAO {
         end_time,
         is_verified,
         section_id,
-        user_id,
-        rating
+        user_id, 
         })
         .returning('*'),
     );
@@ -57,8 +56,7 @@ export default class MastersDAO {
         'masters.end_time',
         'masters.is_verified',
         'masters.section_id',
-        'masters.user_id',
-        'masters.rating'
+        'masters.user_id', 
       ]) 
       .limit(limit)
       .offset(offset)
@@ -74,5 +72,27 @@ export default class MastersDAO {
       })
       .where({ id: id}) 
   }
- 
+
+  async createRating({
+    master_id,
+    rating,
+    comment,
+    user_id, 
+  }: ICreateRating) {
+    return getFirst(
+      await KnexService('ratings')
+        .insert({  
+            master_id,
+            rating,
+            comment,
+            user_id, 
+        })
+        .returning('*'),
+    );
+  }
+
+  getAllRatings(filters) { 
+    return KnexService('ratings')   
+    .andWhere(filters)
+  }
 }

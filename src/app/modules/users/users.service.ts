@@ -4,6 +4,7 @@ import UsersDAO from './dao/users.dao';
 import { ICreateUser, IUpdateUser } from './interface/users.interface';
 import ErrorResponse from '../shared/utils/errorResponse';
 import UserRoleService from './user_roles/user_roles.service';
+import extractQuery from '../shared/utils/extractQuery';
 
 export default class UsersService {
   private usersDao = new UsersDAO();
@@ -41,7 +42,13 @@ export default class UsersService {
     return this.usersDao.update(id, values);
   }
 
-  async getAll(key: string, keyword: string, filters, sorts) {
+  async getAll(key: string, keyword: string, query) {
+    const extractedQuery = extractQuery(query)
+    const filters = extractedQuery.filters  
+ 
+    const sorts = extractedQuery.sorts 
+
+
     return this.usersDao.getAll(key, keyword, filters, sorts);
   }
 
@@ -50,7 +57,22 @@ export default class UsersService {
   } 
 
   async getByChatId(chatId: string) {
-    return this.usersDao.getByChatId(chatId);
+    const user = this.usersDao.getByChatId(chatId); 
+
+    const myRatings = await this.mastersService.getAllRatings({
+      master_id: user['master_id']
+    });
+
+    const totalRating = myRatings.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.rating;
+    }, 0);
+
+    const averageRating = totalRating / myRatings.length;
+
+    return {
+      ...user,
+      rating: averageRating
+    }
   } 
 
   async getById(id: string) {

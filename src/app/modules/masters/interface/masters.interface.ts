@@ -7,8 +7,7 @@ export interface ICreateMaster {
    end_time: string;
    is_verified?: Boolean;
    section_id: string;
-   user_id?: string;
-   rating?: Number;
+   user_id?: string; 
 }
 
 export interface IUpdateMaster {
@@ -20,8 +19,7 @@ export interface IUpdateMaster {
    end_time?: string;
    is_verified?: Boolean;
    section_id?: string;
-   user_id?: string;
-   rating?: Number;
+   user_id?: string; 
 }
 
 export interface IMaster {
@@ -36,6 +34,12 @@ export interface IMaster {
    section_id: string;
    user_id: string;
    created_at: Date;
-   updated_at: Date;
-   rating?: Number;
+   updated_at: Date; 
+}
+
+export interface ICreateRating {
+   master_id: string;
+   user_id: string;
+   rating: number;
+   comment: string;
 }

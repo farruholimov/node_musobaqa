@@ -28,7 +28,7 @@ export default class MastersService {
     });
   }
 
-  update(id: string, values: IUpdateMaster) {
+ update(id: string, values: IUpdateMaster) {
     return this.mastersDao.update(id, values);
   }
 

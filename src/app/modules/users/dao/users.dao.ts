@@ -44,9 +44,9 @@ export default class UsersDAO {
     );
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+ async  getAll(key: string, keyword: string, filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
-    return KnexService('users')
+    return await KnexService('users')
       .select([
         "users.user_id",
         "users.full_name",
@@ -72,20 +72,20 @@ export default class UsersDAO {
       .groupBy("users.user_id", "user_roles.id", "user_roles.user_id", "name")
   }
 
-  getById(id: string) {
-    return KnexService('users')
+  async getById(id: string) {
+    return  await KnexService('users')
       .where({ user_id: id})
       .first();
   }
 
-  getByPhone(phone: string) {
-    return KnexService('users')
+  async getByPhone(phone: string) {
+    return await KnexService('users')
       .where({ phone: phone})
       .first();
   } 
 
-  getByChatId(chat_id: string) {
-    return KnexService('users') 
+  async getByChatId(chat_id: string) {
+    return await KnexService('users') 
       .select([
         "users.user_id",
         "users.full_name",

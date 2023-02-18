@@ -39,7 +39,7 @@ export default class UsersService {
   }
 
   async update(id: string, values: IUpdateUser) {
-    return this.usersDao.update(id, values);
+    return await this.usersDao.update(id, values);
   }
 
   async getAll(key: string, keyword: string, query) {
@@ -49,29 +49,29 @@ export default class UsersService {
     const sorts = extractedQuery.sorts 
 
 
-    return this.usersDao.getAll(key, keyword, filters, sorts);
+    return await this.usersDao.getAll(key, keyword, filters, sorts);
   }
 
   async getByPhone(phone: string) {
-    return this.usersDao.getByPhone(phone);
+    return await this.usersDao.getByPhone(phone);
   } 
 
   async getByChatId(chatId: string) {
-    const user = this.usersDao.getByChatId(chatId); 
+    const user = await this.usersDao.getByChatId(chatId); 
 
-    const myRatings = await this.mastersService.getAllRatings({
-      master_id: user['master_id']
-    });
+    // const myRatings = await this.mastersService.getAllRatings({
+    //   master_id: user['master_id']
+    // });
 
-    const totalRating = myRatings.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue.rating;
-    }, 0);
+    // const totalRating = myRatings.reduce((accumulator, currentValue) => {
+    //   return accumulator + currentValue.rating;
+    // }, 0);
 
-    const averageRating = totalRating / myRatings.length;
+    // const averageRating = totalRating / myRatings.length;
 
     return {
       ...user,
-      rating: averageRating
+      // rating: averageRating
     }
   } 
 

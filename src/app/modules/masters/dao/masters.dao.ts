@@ -44,9 +44,9 @@ export default class MastersDAO {
     );
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+  async getAll(key: string, keyword: string, filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
-    return KnexService('masters')
+    return await KnexService('masters')
       .select([
         'masters.brand_name',
         'masters.address',
@@ -65,8 +65,8 @@ export default class MastersDAO {
       .andWhere(filters) 
   }
 
-  verifyMaster(id: string) {
-    return KnexService('masters')
+  async verifyMaster(id: string) {
+    return await KnexService('masters')
       .update({
         is_verified: true
       })
@@ -91,8 +91,8 @@ export default class MastersDAO {
     );
   }
 
-  getAllRatings(filters) { 
-    return KnexService('ratings')   
+ async getAllRatings(filters) { 
+    return await KnexService('ratings')   
     .andWhere(filters)
   }
 }

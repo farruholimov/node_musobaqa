@@ -21,9 +21,9 @@ const InlineKeyboards = {
             .row()
             .text("Ma'lumotlarni o'zgartirish", "edit_user_info"),
 
-        user_type_menu: new InlineKeyboard()
-            .text("Usta", "set_user_type?type=usta")
-            .text("Mijoz", "set_user_type?type=mijoz"),
+        user_roles_menu: new InlineKeyboard()
+            .text("Usta", "set_user_role?role=2")
+            .text("Mijoz", "set_user_role?role=3"),
 
         days_menu: new InlineKeyboard()
             .text("Dushanba", "select_day?day=mon")
@@ -44,7 +44,7 @@ const InlineKeyboards = {
             let menu = [
                 [{
                     text: "Orqaga",
-                    callback_data: `back?step=user_type&menu=user_type_menu`
+                    callback_data: `back?step=user_type&menu=user_roles_menu`
                 }]
             ]
             if (!sections.length) return menu

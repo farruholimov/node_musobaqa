@@ -26,9 +26,11 @@ const data = [
 
 export default class MessagesController{
     public sendSections = async (ctx) => {
+        console.log(InlineKeyboards.user_roles_menu.inline_keyboard);
+        
         await ctx.reply(messages.selectSectionMsg, {
             parse_mode: "HTML",
-            reply_markup: InlineKeyboards.user_sections(data),
+            reply_markup: InlineKeyboards.user_roles_menu,
         })
     }
 

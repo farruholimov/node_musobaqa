@@ -4,6 +4,10 @@ config();
 
 const { env } = process;
 
+export const bot = {
+  token: env.TG_TOKEN
+}
+
 export const pg = {
   host: env.PG_HOST || 'localhost',
   port: env.PG_PORT || 5432,
@@ -27,18 +31,3 @@ export const server = {
     expiresIn: env.ACCESS_TOKEN_EXPIRES_IN,
   }
 };
-
-export const emailService = {
-  username: env.EMAIl_USERNAME,
-  password: env.EMAIL_PASSWORD,
-  hostname: env.EMAIL_HOSTNAME,
-  from: env.EMAIL_FROM
-};
-
-export const PAYMENT = {
-  PRODUCT: env.PRODUCT, 
-  TEST_TRANSACTION_URL: env.TEST_TRANSACTION_URL,
-  TEST_TRANSACTION_API_KEY: env.TRANSACTION_API_KEY,
-  TEST_TRANSACTION_API_URL: env.TRANSACTION_API_URL
-};
-

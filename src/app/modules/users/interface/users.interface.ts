@@ -1,15 +1,19 @@
 export interface ICreateUser {
   full_name: string;
-  email: string;
-  password: string;
-  language_id: number;
+  phone: string;  
+  latitude: string;
+  longitude: string; 
+  chat_id: string;
+  step: string;
+  role_id?: string;
 }
 
 export interface IUpdateUser {
   full_name?: string;
-  email?: string;
-  password?: string;
-  language_id?: number;
+  phone?: string;  
+  latitude?: string;
+  longitude?: string;
+  step?: string;
 }
 
 export interface IUser {
@@ -17,9 +21,9 @@ export interface IUser {
   created_at: Date;
   updated_at: Date;
   full_name: string;
-  email: string;
-  password: string;
-  language_id: number;
-  is_active: boolean;
-  is_verified: boolean;
+  phone: string;  
+  longitude: string;
+  latitude: string;
+  chat_id: string;
+  step: string;
 }

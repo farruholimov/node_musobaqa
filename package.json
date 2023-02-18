@@ -33,10 +33,10 @@
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
-    "query-string": "^8.1.0",
     "slugify": "^1.6.5",
     "swagger-ui-express": "^4.5.0",
     "tsoa": "^4.1.1",
+    "url-parse": "^1.5.10",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

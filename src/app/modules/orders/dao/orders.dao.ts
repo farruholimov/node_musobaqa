@@ -35,9 +35,9 @@ export default class OrdersDAO {
     );
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+ async getAll(key: string, keyword: string, filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
-    return KnexService('orders') 
+    return await KnexService('orders') 
       .from('orders')
       .select([
         'orders.master_id',

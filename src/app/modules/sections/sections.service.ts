@@ -5,18 +5,18 @@ import SectionsDAO from "./dao/sections.dao";
 export default class SectionsService {
   private sectionsDao = new SectionsDAO();
 
-  create({name}: ICreateSection) {
+ async create({name}: ICreateSection) {
 
-    return this.sectionsDao.create({
+    return await this.sectionsDao.create({
         name
     });
   }
 
-  update(id: string, values: ICreateSection) {
-    return this.sectionsDao.update(id, values);
+ async update(id: string, values: ICreateSection) {
+    return await this.sectionsDao.update(id, values);
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
-    return this.sectionsDao.getAll(key, keyword, filters, sorts);
+  async getAll(key: string, keyword: string, filters, sorts) {
+    return await this.sectionsDao.getAll(key, keyword, filters, sorts);
   }  
 }

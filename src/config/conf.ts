@@ -4,8 +4,12 @@ config();
 
 const { env } = process;
 
-export const bot = {
-  token: env.TG_TOKEN
+export const bot: {
+  token: string,
+  admin_chat_id: number | string
+} = {
+  token: env.TG_TOKEN,
+  admin_chat_id: env.ADMIN_ID
 }
 
 export const pg = {

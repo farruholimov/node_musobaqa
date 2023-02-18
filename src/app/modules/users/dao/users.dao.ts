@@ -33,6 +33,17 @@ export default class UsersDAO {
     );
   }
 
+  async updateByChatId(id: string, values: IUpdateUser): Promise<IUser> {
+    return getFirst(
+      await KnexService('users')
+        .update({
+          ...values
+        })
+        .where({chat_id: id})
+        .returning('*'),
+    );
+  }
+
   getAll(key: string, keyword: string, filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
     return KnexService('users')

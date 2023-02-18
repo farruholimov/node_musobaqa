@@ -5,7 +5,7 @@ export interface ICreateUser {
   longitude: string; 
   chat_id: string;
   step: string;
-  role_id?: string;
+  role_id?: number;
 }
 
 export interface IUpdateUser {

@@ -27,10 +27,12 @@ export default class UsersService {
       step
     });
 
-    const role = await this.userRolesService.create({
-      role_id: Number(role_id),
-      user_id: new_user.user_id
-    });
+    if(role_id) {
+      const role = await this.userRolesService.create({
+        role_id: Number(role_id),
+        user_id: new_user.user_id
+      });
+    }
 
     return new_user
   }
@@ -79,5 +81,9 @@ export default class UsersService {
         master
       }
 
+  }
+
+  async updateByChatId(chatId: string, values: IUpdateUser) {
+    return this.usersDao.update(chatId, values);
   }
 }

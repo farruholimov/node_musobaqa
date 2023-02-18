@@ -1,8 +1,8 @@
-import UsersDAO from './dao/masters.dao';
+import MastersDAO from './dao/masters.dao';
 import { ICreateMaster, IUpdateMaster } from './interface/masters.interface';
 
 export default class MastersService {
-  private usersDao = new UsersDAO();
+  private mastersDao = new MastersDAO();
 
   create({ brand_name,
     address,
@@ -15,7 +15,7 @@ export default class MastersService {
     rating,
     user_id }: ICreateMaster) {
 
-    return this.usersDao.create({
+    return this.mastersDao.create({
       brand_name,
       address,
       average_time,
@@ -30,14 +30,14 @@ export default class MastersService {
   }
 
   update(id: string, values: IUpdateMaster) {
-    return this.usersDao.update(id, values);
+    return this.mastersDao.update(id, values);
   }
 
   getAll(key: string, keyword: string, filters, sorts) {
-    return this.usersDao.getAll(key, keyword, filters, sorts);
+    return this.mastersDao.getAll(key, keyword, filters, sorts);
   } 
 
   verifyMaster(id: string) {
-    return this.usersDao.verifyMaster(id);
+    return this.mastersDao.verifyMaster(id);
   } 
 }

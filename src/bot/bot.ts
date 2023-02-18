@@ -61,7 +61,7 @@ export default class TgBot {
                 const chat_id = String(ctx.msg.chat.id)
         
                 let user = await this.userService.getByChatId(chat_id)
-        
+                
                 if (!user) {
                     user = await this.userService.registerUser({
                         chat_id: chat_id,

@@ -11,4 +11,11 @@ export default class UsersController{
             step: step
         })
     }
+
+    public setUserRole = async (ctx, role) => {
+        ctx.session.user_data.role_id = role
+        await this.userService.updateByChatId(ctx.msg.chat.id, {
+            role_id: role
+        })
+    }
 }

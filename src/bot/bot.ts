@@ -6,15 +6,20 @@ import {
 } from 'grammy'
 import {Router} from '@grammyjs/router'
 import { bot as botConfig } from '../config/conf'
-import MenuMessagesController from './controllers/menuMessages';
+import MessagesController from './controllers/sendMsg';
 import UsersController from './controllers/users.controller';
+import BrandsController from './controllers/brands.controller';
+import UsersService from '../app/modules/users/users.service';
+import messages from './assets/messages';
 
 const bot = new Bot(botConfig.token);
 
 export default class TgBot {
-    private userService = new UserService()
-    private menusController = new MenuMessagesController()
+    private userService = new UsersService()
+    private sendMsg = new MessagesController()
     private usersController = new UsersController()
+    private brandsController = new BrandsController()
+    private router = new Router((ctx) => ctx.session.step)
 
     public async runBot(){
         try {
@@ -53,50 +58,35 @@ export default class TgBot {
             }]);
     
             bot.command("start", async (ctx, next) => {
-                const chat_id = ctx.msg.chat.id
+                const chat_id = String(ctx.msg.chat.id)
         
-                let user = await this.userService.findByTelegramID(chat_id)
+                let user = await this.userService.getByChatId(chat_id)
         
                 if (!user) {
-                    user = await this.userService.create({
+                    user = await this.userService.registerUser({
                         chat_id: chat_id,
-                        role: 3,
+                        role_id: 3,
                         step: "section"
                     })
                     ctx.session.chat_id = chat_id
                     ctx.session.user_id = user.id
                     ctx.session.step = "section"
-                    await this.menusController.sendSections(ctx)
+
+                    await this.sendMsg.sendSections(ctx)
                     return
-                } else if (user) {
-        
-                    if (!user.full_name) {
-                        await this.usersController.updateStep(ctx, "name")
-                        await  this.menusController.askFullName(ctx)
-                        return
-                    }
-                    if (!user.phone) {
-                        await this.usersController.updateStep(ctx, "phone")
-                        await  this.menusController.askFullName(ctx)
-                        return
-                    }
                 }
         
                 ctx.session.user = {
-                    tgid: chat_id,
-                    id: user.id,
+                    chat_id,
+                    user_id: user.id,
                     name: user.full_name,
-                    lang: user.language_code,
                     phone: user.phone_number,
                 }
         
                 ctx.session.step = user.step
         
-                if (user.step == "menu") {
-                    await sendMenu(ctx)
-                }
-                else if (user.step == "order") {
-                    await ctx.reply(messages[user.language_code].orderingMsg)
+                if (user.step == "idle") {
+                    await this.brandsController.sendMainMenu(ctx)
                 }
                 else {
                     next()
@@ -116,7 +106,7 @@ export default class TgBot {
                 }
             });
         
-            bot.use(router)
+            bot.use(this.router)
             bot.start()
         } catch (error) {
             console.log(error);

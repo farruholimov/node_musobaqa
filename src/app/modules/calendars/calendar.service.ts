@@ -1,3 +1,4 @@
+import extractQuery from '../shared/utils/extractQuery';
 import CalendarDAO from './dao/calendar.dao';
 import { ICreateCalendar, IUpdateCalendar } from './interface/calendar.interface'; 
 
@@ -26,7 +27,13 @@ export default class CalendarsService {
     return this.calendarsDao.update(id, values);
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+  getAll(key: string, keyword: string, query) {
+
+    const extractedQuery = extractQuery(query)
+    const filters = extractedQuery.filters  
+ 
+    const sorts = extractedQuery.sorts 
+
     return this.calendarsDao.getAll(key, keyword, filters, sorts);
   } 
  

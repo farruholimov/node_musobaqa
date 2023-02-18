@@ -1,4 +1,4 @@
-import { ICreateCalendar, ICalendar, IUpdateCalendar } from './../interface/calendar.interface';
+import { ICreateCalendar, ICalendar, IUpdateCalendar } from '../interface/calendar.interface';
 import { Knex } from 'knex'; 
 import KnexService from '../../../database/connection';
 import { getFirst } from '../../shared/utils/utils'; 

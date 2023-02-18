@@ -8,7 +8,6 @@ console.log(createCalendar('9:30', '18:30', '15'));
 
 const server = http.createServer(ExpressApp.getServer);
 
-// jimi();
 // _________LISTEN PORT___________
 const port = process.env.PORT || 5000;
 

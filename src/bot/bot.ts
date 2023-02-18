@@ -7,7 +7,7 @@ import {
 import {
     Router
 } from '@grammyjs/router'
-import queryString from "query-string"
+import parseUrl from "url-parse"
 
 import {
     bot as botConfig
@@ -16,7 +16,9 @@ import {
 import MessagesController from './controllers/sendMsg';
 import UsersController from './controllers/users.controller';
 import BrandsController from './controllers/brands.controller';
+
 import UsersService from '../app/modules/users/users.service';
+import MastersService from '../app/modules/masters/masters.service';
 
 import messages from './assets/messages';
 import InlineKeyboards from "./assets/inline_keyboard"
@@ -25,6 +27,8 @@ const bot = new Bot(botConfig.token);
 
 export default class TgBot {
     private userService = new UsersService()
+    private masterService = new MastersService()
+
     private sendMsg = new MessagesController()
     private usersController = new UsersController()
     private brandsController = new BrandsController()
@@ -101,14 +105,42 @@ export default class TgBot {
             }
         })
 
+        this.router.route("name", async (ctx) => {
+            try {
+                await this.usersController.setFullName(ctx, ctx.msg.text)
+                await this.sendMsg.askPhone(ctx)
+                await this.usersController.updateStep(ctx, "phone")
+            } catch (error) {
+                console.log(error);
+            }
+        })
+
+        this.router.route("phone", async (ctx) => {
+            try {
+                await this.usersController.setPhone(ctx, ctx.msg.contact ? ctx.msg.contact.phone_number : ctx.msg.text)
+                await this.sendMsg.askBrandName(ctx)
+                await this.usersController.updateStep(ctx, "brand_name")
+            } catch (error) {
+                console.log(error);
+            }
+        })
+
+        this.router.route("brand_name", async (ctx) => {
+            try {
+                await this.usersController.setPhone(ctx, ctx.msg.text)
+                await this.sendMsg.askBrandName(ctx)
+                await this.usersController.updateStep(ctx, "brand_name")
+            } catch (error) {
+                console.log(error);
+            }
+        })
+
         bot.on("callback_query:data", async (ctx) => {
 
             const {
-                url: command,
+                pathname: command,
                 query
-            } = queryString.parseUrl(ctx.callbackQuery.data)
-
-            console.log(command, query)
+            } = parseUrl(ctx.callbackQuery.data, true)
 
             switch (command) {
                 case "set_user_role":

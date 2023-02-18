@@ -39,7 +39,7 @@ export default class MastersDAO {
         .update({
           ...values
         })
-        .where({id: id})
+        .where({user_id: id})
         .returning('*'),
     );
   }

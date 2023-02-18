@@ -28,8 +28,8 @@ export default class MastersService {
     });
   }
 
- update(id: string, values: IUpdateMaster) {
-    return this.mastersDao.update(id, values);
+ update(user_id: string, values: IUpdateMaster) {
+    return this.mastersDao.update(user_id, values);
   }
 
   getAll(key: string, keyword: string, query) {

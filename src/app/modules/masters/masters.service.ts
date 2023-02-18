@@ -1,5 +1,6 @@
+import extractQuery from '../shared/utils/extractQuery';
 import MastersDAO from './dao/masters.dao';
-import { ICreateMaster, IUpdateMaster } from './interface/masters.interface';
+import { ICreateMaster, ICreateRating, IUpdateMaster } from './interface/masters.interface';
 
 export default class MastersService {
   private mastersDao = new MastersDAO();
@@ -11,8 +12,7 @@ export default class MastersService {
     start_time,
     end_time,
     is_verified,
-    section_id,
-    rating,
+    section_id, 
     user_id }: ICreateMaster) {
 
     return this.mastersDao.create({
@@ -22,8 +22,7 @@ export default class MastersService {
       target,
       start_time,
       end_time,
-      is_verified,
-      rating,
+      is_verified, 
       section_id,
       user_id
     });
@@ -33,11 +32,37 @@ export default class MastersService {
     return this.mastersDao.update(id, values);
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+  getAll(key: string, keyword: string, query) {
+    const extractedQuery = extractQuery(query)
+    const filters = extractedQuery.filters  
+ 
+    const sorts = extractedQuery.sorts 
+
+
     return this.mastersDao.getAll(key, keyword, filters, sorts);
   } 
 
   verifyMaster(id: string) {
     return this.mastersDao.verifyMaster(id);
+  } 
+
+  createRating({ 
+    master_id,
+    rating,
+    comment,
+    user_id 
+  }: ICreateRating) {
+
+    return this.mastersDao.createRating({
+      master_id,
+      rating,
+      comment,
+      user_id 
+    });
+  }
+
+  getAllRatings(filters) { 
+ 
+    return this.mastersDao.getAllRatings(filters);
   } 
 }

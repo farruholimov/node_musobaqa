@@ -1,8 +1,8 @@
 export interface ICreateUser {
-  full_name: string;
-  phone: string;  
-  latitude: string;
-  longitude: string; 
+  full_name?: string;
+  phone?: string;  
+  latitude?: string;
+  longitude?: string; 
   chat_id: string;
   step: string;
   role_id?: number;

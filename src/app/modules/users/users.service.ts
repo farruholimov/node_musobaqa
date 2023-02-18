@@ -2,15 +2,12 @@ import { ICreateMaster } from './../masters/interface/masters.interface';
 import MastersService from '../masters/masters.service';
 import UsersDAO from './dao/users.dao';
 import { ICreateUser, IUpdateUser } from './interface/users.interface';
-import ErrorResponse from '../shared/utils/errorResponse';
-import UserRoleService from './user_roles/user_roles.service';
+import ErrorResponse from '../shared/utils/errorResponse'; 
 import extractQuery from '../shared/utils/extractQuery';
 
 export default class UsersService {
   private usersDao = new UsersDAO();
-  private mastersService = new MastersService();
-  private userRolesService = new UserRoleService()
-
+  private mastersService = new MastersService(); 
   async registerUser({ full_name, phone, latitude, longitude, chat_id, step, role_id }: ICreateUser) {
 
     const user = await this.getByChatId(chat_id);
@@ -25,15 +22,9 @@ export default class UsersService {
       phone,
       latitude,
       chat_id,
-      step
-    });
-
-    if(role_id) {
-      const role = await this.userRolesService.create({
-        role_id: Number(role_id),
-        user_id: new_user.user_id
-      });
-    }
+      step, 
+      role_id
+    }); 
 
     return new_user
   }
@@ -84,17 +75,12 @@ export default class UsersService {
 
       if(user) throw new ErrorResponse(400, 'User already exists!');
 
-      const new_user = await this.registerUser({full_name, phone, latitude, longitude, chat_id, step});
+      const new_user = await this.registerUser({full_name, phone, latitude, longitude, chat_id, step, role_id});
 
       const master = await this.mastersService.create({
         brand_name,  address, average_time, target, start_time, end_time, section_id, user_id: new_user.user_id
       })
-
-      const role = await this.userRolesService.create({
-        role_id: Number(role_id),
-        user_id: new_user.user_id
-      });
-      
+ 
       return {
         ...new_user,
         master

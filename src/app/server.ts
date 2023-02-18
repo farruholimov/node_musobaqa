@@ -1,17 +1,15 @@
 import cors from "cors";
 import express, { Express, Router } from 'express';
-import errorHandler from "./modules/shared/middlewares/errorHandler";
-import morgan from 'morgan';
+import errorHandler from "./modules/shared/middlewares/errorHandler"; 
 import path from "path";
 
 class App {
   public app: Express;
 
-  constructor(router: Router) {
+  constructor() {
     this.app = express();
 
-    this.initializeMiddlewares();
-    this.initializeRoutes(router);
+    this.initializeMiddlewares(); 
     this.initializeErrorHandling();
   }
 
@@ -19,19 +17,9 @@ class App {
     return this.app;
   }
 
-  private initializeMiddlewares() {
-    this.app.use(cors({
-      origin: "*"
-    }));
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(morgan("tiny"))
-
+  private initializeMiddlewares() {  
   }
-
-  private initializeRoutes(router: Router) {
-    this.app.use('/api', router);
-  }
+ 
   private initializeErrorHandling() {
     this.app.use(errorHandler);
   }

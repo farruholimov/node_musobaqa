@@ -1,8 +1,7 @@
 import http from 'http';
-import App from "./server";
-import router from "./router";
+import App from "./app/server"; 
 
-const ExpressApp = new App(router)
+const ExpressApp = new App()
 
 const server = http.createServer(ExpressApp.getServer);
 

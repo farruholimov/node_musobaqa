@@ -1,12 +1,14 @@
-import { createCalendar } from './app/modules/shared/utils/createCalendar';
-import jimi from './bot/bot';
 import http from 'http';
 import App from './app/server';
+import TgBot from './bot/bot';
+
+const Bot = new TgBot()
 
 const ExpressApp = new App();
 
 const server = http.createServer(ExpressApp.getServer);
 
+Bot.runBot()
 // _________LISTEN PORT___________
 const port = process.env.PORT || 5000;
 

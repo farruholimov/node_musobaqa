@@ -24,16 +24,20 @@ export default class CalendarsService {
         });
     }
 
-    update(id: string, values: IUpdateCalendar) {
-        return this.calendarsDao.update(id, values);
+    async update(id: string, values: IUpdateCalendar) {
+        return await this.calendarsDao.update(id, values);
     }
 
-    getAll(query?) {
+    async getAll(query?) {
         const extractedQuery = extractQuery(query);
         const filters = extractedQuery.filters;
 
         const sorts = extractedQuery.sorts;
 
-        return this.calendarsDao.getAll(filters, sorts);
+        return {
+            times: await this.calendarsDao.getAll(filters, sorts),
+            count: await this.calendarsDao.getCount(filters)
+
+        }
     }
 }

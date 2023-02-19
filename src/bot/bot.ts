@@ -35,6 +35,7 @@ export default class TgBot {
                 user_id: null,
                 chat_id: null,
                 step: "idle",
+                page: "idle",
                 master_data: {
                     brand_name: null,
                     address: null,
@@ -103,6 +104,23 @@ export default class TgBot {
                 next();
             }
         });
+
+        bot.command("admin", async (ctx, next) => {
+            const user = await this.userService.getByChatId(String(ctx.msg.chat.id))
+
+            if (user.role_id == 1) {
+                ctx.session.is_admin = true
+                ctx.reply(messages.switchedToAdminMsg, {
+                    parse_mode: "HTML"
+                })
+            }else {
+                ctx.reply(messages.notAdminMsg, {
+                    parse_mode: "HTML"
+                })
+            }
+            
+            next()
+        })
 
         this.router.route('name', async (ctx) => {
             try {
@@ -248,10 +266,7 @@ export default class TgBot {
                 case 'set_user_role':
                     try {
                         if (query.role == 2) {
-                            await this.usersController.setUserRole(
-                                ctx,
-                                query.role
-                            );
+                            await this.usersController.setUserRole(ctx, query.role);
                             await this.msgController.sendSections(ctx, true);
                             await this.usersController.updateStep(
                                 ctx,
@@ -259,10 +274,7 @@ export default class TgBot {
                             );
                         } else {
                             await this.usersController.sendMainMenu(ctx, true);
-                            await this.usersController.updateStep(
-                                ctx,
-                                'section'
-                            );
+                            await this.usersController.updateStep(ctx, 'section');
                         }
                     } catch (error) {
                         console.log(error);
@@ -322,20 +334,30 @@ export default class TgBot {
                 case 'contact_admin':
                     try {
                         await this.msgController.askMessage(ctx);
-                        await this.usersController.updateStep(
-                            ctx,
-                            'message_to_admin'
-                        );
+                        await this.usersController.updateStep(ctx, 'message_to_admin');
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case 'accept_master':
+                    try {
+                        await this.mastersController.acceptMaster(ctx, query.master_id);
+                        await this.usersController.updateStep(ctx, 'message_to_admin');
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case 'reject_master':
+                    try {
+                        await this.mastersController.rejectMaster(ctx, query.master_id);
+                        await this.usersController.updateStep(ctx, 'message_to_admin');
                     } catch (error) {
                         console.log(error);
                     }
                     break;
                 case 'my_clients':
                     try {
-                        await this.ordersController.sendMasterOrders(
-                            ctx,
-                            query.page
-                        );
+                        await this.ordersController.sendMasterOrders(ctx, query.page);
                     } catch (error) {
                         console.log(error);
                     }
@@ -356,6 +378,27 @@ export default class TgBot {
                     break;
                 case 'select_day':
                     try {
+                        await this.mastersController.sendTimes(ctx, true, query);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case 'services':
+                    try {
+                        await this.msgController.sendSections(ctx, true, "section_masters", "user_menu")
+                    } catch(error){
+                        console.log(error);
+                    }
+                    break;
+                case 'select_day':
+                    try {
+                        await this.mastersController.sendTimes(ctx, true, query);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case 'my_times':
+                    try {
                         await this.mastersController.sendTimes(
                             ctx,
                             true,
@@ -365,21 +408,9 @@ export default class TgBot {
                         console.log(error);
                     }
                     break;
-                case 'services':
+                case 'update_time':
                     try {
-                        await this.msgController.sendSections(ctx, true, "section_masters", query.step)
-                        await this.msgController.sendSections(ctx, true);
-                    } catch(error){
-                        console.log(error);
-                    }
-                    break;
-                case 'select_day':
-                    try {
-                        await this.mastersController.sendTimes(
-                            ctx,
-                            true,
-                            query
-                        );
+                        await this.mastersController.updateTimes(ctx,true,query)
                     } catch (error) {
                         console.log(error);
                     }
@@ -393,7 +424,21 @@ export default class TgBot {
                     break;
                 case "section_masters":
                     try {
-                        await this.mastersController.sendSectionMasters(ctx, null, query.section_id)
+                        await this.mastersController.sendSectionMasters(ctx, 1, query.section_id)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "next_masters":
+                    try {
+                        await this.mastersController.sendSectionMasters(ctx, query.page, ctx.session.chosen_section_id)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "prev_masters":
+                    try {
+                        await this.mastersController.sendSectionMasters(ctx, query.page, ctx.session.chosen_section_id)
                     } catch (error) {
                         console.log(error);
                     }
@@ -476,6 +521,7 @@ export default class TgBot {
                     break;
 
                 case 'back':
+                    ctx.session.page = null
                     switch (query.step) {
                         case 'waiting_verification':
                             try {
@@ -515,6 +561,14 @@ export default class TgBot {
                                     ctx,
                                     'idle'
                                 );
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            break;
+                        case 'user_menu':
+                            try {
+                                await this.usersController.sendMainMenu(ctx, true);
+                                await this.usersController.updateStep(ctx, 'idle');
                             } catch (error) {
                                 console.log(error);
                             }

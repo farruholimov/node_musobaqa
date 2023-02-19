@@ -87,6 +87,9 @@ export default class MastersController {
         desc ? query["order"] = "DESC" : null        
         
         const masters = await this.masterService.getAll(query)
+        console.log(masters);
+        console.log(page);
+        
         
         if (!masters || !masters.length) {
             await ctx.api.answerCallbackQuery(ctx.callbackQuery.id, {
@@ -118,7 +121,7 @@ export default class MastersController {
         {
             parse_mode: "HTML",
             reply_markup: {
-                inline_keyboard: InlineKeyboards.masters_menu_switch(masters)
+                inline_keyboard: InlineKeyboards.masters_menu_switch(masters, page)
             },
         })
     }
@@ -149,14 +152,16 @@ export default class MastersController {
     public sendTimes = async (
         ctx,
         edit: boolean = false,
-        query: { day: string }
+        query: { day: string, page: number},
     ) => {
+        const page = query.page ? query.page : 1
         const master = await this.masterService.getByChatId(
             ctx.callbackQuery.message.chat.id
         );
-        const times = await this.calendarsService.getAll({
+        const {times,count: [{count}] } = await this.calendarsService.getAll({
             day: query.day,
             master_id: master.id,
+            page
         });
 
         if (edit)
@@ -165,15 +170,54 @@ export default class MastersController {
                 ctx.callbackQuery.message.message_id,
                 messages.getTimessMessage(query.day),
                 {
-                    parse_mode: 'HTML',
-                    reply_markup: InlineKeyboards.times_menu(times),
+                    reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))}
+                    
                 }
             );
         else
             await ctx.reply(messages.getTimessMessage(query.day), {
-                parse_mode: 'HTML',
-                reply_markup: InlineKeyboards.times_menu(times),
+                reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))},
             });
+    };
+
+    public updateTimes = async (
+        ctx,
+        edit: boolean = false,
+        query: any,
+    ) => {
+        const page = query.page ? query.page : 1
+
+        const master = await this.masterService.getByChatId(
+            ctx.callbackQuery.message.chat.id
+        );
+        const time = await this.calendarsService.getOne({
+            id: query.id,
+            master_id: master.id,
+        });
+
+        await this.calendarsService.update(time.id, {busy: !time.busy})
+
+        const {times,count: [{count}] } = await this.calendarsService.getAll({
+            day: time.day,
+            master_id: master.id,
+            page
+        });
+
+        if (edit)
+            await ctx.api.editMessageText(
+                ctx.callbackQuery.message.chat.id,
+                ctx.callbackQuery.message.message_id,
+                messages.getTimessMessage(time.day),
+                {
+                    reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))}
+                    
+                }
+            );
+        else
+            await ctx.reply(messages.getTimessMessage(time.day), {
+                reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))},
+            });
+        
     };
 
     public setSection = async (ctx, section) => {
@@ -253,9 +297,11 @@ export default class MastersController {
         Reyting:\n${new Array(master.rating).fill("⭐️")}
         `
 
+        const reply_markup = ctx.session.is_admin ?  InlineKeyboards.master_register_menu : InlineKeyboards.master_info_menu
+
         await ctx.reply(message, {
             parse_mode: 'HTML',
-            reply_markup: InlineKeyboards.verify_info,
+            reply_markup,
         });
     };
 
@@ -293,6 +339,29 @@ export default class MastersController {
         //     text: message,
         //     user_id: user.user_id
         // })
+    };
+
+    public acceptMaster = async (ctx, master_id) => {
+        const master = await this.masterService.getByChatId(
+            master_id
+        );
+        const user = await this.userService.getById(master.user_id);
+
+        await this.masterService.update(master.id, {
+            is_verified: true,
+        })
+        await ctx.api.sendMessage(user.chat_id, messages.acceptedMsg, {
+            parse_mode: "HTML"
+        })
+    };
+
+    public rejectMaster = async (ctx, master_id) => {
+        const master = await this.masterService.getById(master_id);
+        const user = await this.userService.getById(master.user_id);
+        await ctx.api.sendMessage(user.chat_id, messages.notAcceptedMsg, {
+            parse_mode: "HTML"
+        })
+        await this.masterService.deleteMasterByUserId(user.user_id)
     };
 
     public checkVerification = async (ctx) => {

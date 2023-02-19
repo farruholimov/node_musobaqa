@@ -35,13 +35,23 @@ const InlineKeyboards = {
     search_sections_menu: new InlineKeyboard()
         .text("Ism bo'yicha izlash", 'search_by_name')
         .row()
-        .text("Reyting bo'yicha tartiblash", 'sort_by_rating')
+        .text("Reyting bo'yicha tartiblash", 'order_by_rating')
         .row()
         .text('Orqaga', 'back?step=section_masters'),
 
     user_roles_menu: new InlineKeyboard()
         .text('Usta', 'set_user_role?role=2')
         .text('Mijoz', 'set_user_role?role=3'),
+
+    master_info_menu: (master_id) => new InlineKeyboard()
+        .text('Vaqt olish', `book_time?master_id=${master_id}`)
+        .text('Baholash', `rate_master?master_id=${master_id}`)
+        .text('Ortga', 'back?step=section_masters'),
+
+    master_register_menu: (master_id) => new InlineKeyboard()
+        .text('Tasdiqlash', `accept_master?master_id=${master_id}`)
+        .text('Bekor qilish', `reject_master?master_id=${master_id}`)
+        .text('Ortga', 'back?step=section_masters'),
 
     days_menu: (days: string[]) =>
         new InlineKeyboard()
@@ -55,52 +65,29 @@ const InlineKeyboards = {
             .text(days[6], `select_day?day=${days[6]}`)
             .text('Orqaga ↩️', `back?step=master_menu`),
 
-    times_menu: (times: string[], page = 1, countPage = 10) =>
-        new InlineKeyboard()
-            .text(
-                `${times[0]['start_time']}-${times[0]['end_time']}`,
-                `update_time?id=${times[0]['id']}`
-            )
-            .text(
-                `${times[1]['start_time']}-${times[1]['end_time']}`,
-                `update_time?id=${times[1]['id']}`
-            )
-            .row()
-            .text(
-                `${times[2]['start_time']}-${times[2]['end_time']}`,
-                `update_time?id=${times[2]['id']}`
-            )
-            .text(
-                `${times[3]['start_time']}-${times[3]['end_time']}`,
-                `update_time?id=${times[3]['id']}`
-            )
-            .row()
-            .text(
-                `${times[4]['start_time']}-${times[4]['end_time']}`,
-                `update_time?id=${times[4]['id']}`
-            )
-            .text(
-                `${times[5]['start_time']}-${times[5]['end_time']}`,
-                `update_time?id=${times[5]['id']}`
-            )
-            .row()
-            .text(
-                `${times[6]['start_time']}-${times[6]['end_time']}`,
-                `update_time?id=${times[6]['id']}`
-            )
-            .text(
-                `${times[7]['start_time']}-${times[7]['end_time']}`,
-                `update_time?id=${times[7]['id']}`
-            )
-            .row()
-            .text('◀️', `my_times?page=${Number(page) ? Number(page) - 1 : 0}`)
-            .text(`${page}/${countPage}`)
-            .text(
-                '▶️',
-                `my_times?page=${Number(page) ? Number(page) + 1 : 0 + 1}`
-            )
-            .row()
-            .text('Orqaga ↩️', `back?step=return_timetable`),
+    times_menu: (times: string[], page, countPage) => {
+        var result = []
+        var row =[]
+
+        times.forEach((time, i) => {
+            row.push({
+                text: `${time['busy'] ? '❌' : ''}${time['start_time']}-${time['end_time']}`,
+                callback_data:`update_time?id=${time['id']}&page=${page}`
+            })
+            if(i %2 !=0) {
+                result.push(row)
+                row=[]
+            }
+        })
+        result.push([
+            {text :'◀️', callback_data :`my_times?page=${Number(page) - 1}&day=${times[0]['day']}`},
+            {text: `${page}/${countPage-1}`, callback_data: 'jimijimi'},
+            {text: '▶️', callback_data: `my_times?page=${Number(page) + 1}&day=${times[0]['day']}`}
+        ])
+        result.push([{text: 'Orqaga ↩️', callback_data: `back?step=return_timetable`}])
+        
+        return result
+    },
 
     orders_menu_switch: (page, step) =>
         new InlineKeyboard()
@@ -114,10 +101,10 @@ const InlineKeyboards = {
             let menu = [
                 [{
                     text: "◀️",
-                    callback_data: `section_masters?page=${Number(page) ? Number(page) - 1 : 0}`
+                    callback_data: `prev_masters?page=${Number(page) - 1}`
                 },{
                     text: "▶️",
-                    callback_data: `section_masters?page=${Number(page) ? Number(page) + 1: 0 + 1}`
+                    callback_data: `next_masters?page=${Number(page) + 1}`
                 }],
                 [{
                     text: "Orqaga ↩️",

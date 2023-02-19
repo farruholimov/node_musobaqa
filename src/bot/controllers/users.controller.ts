@@ -56,4 +56,20 @@ export default class UsersController{
             phone: phone
         })
     }
+
+    public rateUsers = async (ctx) => {
+        const replyMarkup = {
+            inline_keyboard: [
+            [
+                { text: '⭐️', callback_data: '1' },
+                { text: '⭐️', callback_data: '2' },
+                { text: '⭐️', callback_data: '3' },
+                { text: '⭐️', callback_data: '4' },
+                { text: '⭐️', callback_data: '5' },
+            ],
+            ],
+        };
+        ctx.reply('Ustani baholash:', { reply_markup: replyMarkup });
+        
+    }
 }

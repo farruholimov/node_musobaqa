@@ -168,13 +168,13 @@ export default class MastersController {
                 messages.getTimessMessage(query.day),
                 {
                     parse_mode: 'HTML',
-                    reply_markup: InlineKeyboards.times_menu(times,page, Number(count)),
+                    reply_markup: InlineKeyboards.times_menu(times,page, Math.ceil(Number(count)/8)),
                 }
             );
         else
             await ctx.reply(messages.getTimessMessage(query.day), {
                 parse_mode: 'HTML',
-                reply_markup: InlineKeyboards.times_menu(times,page,Number(count)),
+                reply_markup: InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8)),
             });
     };
 

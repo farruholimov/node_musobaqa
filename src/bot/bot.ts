@@ -369,6 +369,17 @@ export default class TgBot {
                     try {
                         await this.msgController.sendSections(ctx, true, "section_masters", query.step)
                         await this.msgController.sendSections(ctx, true);
+                    } catch(error){
+                        console.log(error);
+                    }
+                    break;
+                case 'select_day':
+                    try {
+                        await this.mastersController.sendTimes(
+                            ctx,
+                            true,
+                            query
+                        );
                     } catch (error) {
                         console.log(error);
                     }
@@ -377,7 +388,7 @@ export default class TgBot {
                     try {
                         await this.ordersController.sendUserOrders(ctx, true);
                     } catch (error) {
-                            console.log(error);
+                        console.log(error);
                     }
                     break;
                 case "section_masters":

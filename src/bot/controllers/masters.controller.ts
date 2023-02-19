@@ -167,14 +167,13 @@ export default class MastersController {
                 ctx.callbackQuery.message.message_id,
                 messages.getTimessMessage(query.day),
                 {
-                    parse_mode: 'HTML',
-                    reply_markup: InlineKeyboards.times_menu(times,page, Math.ceil(Number(count)/8)),
+                    reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))}
+                    
                 }
             );
         else
             await ctx.reply(messages.getTimessMessage(query.day), {
-                parse_mode: 'HTML',
-                reply_markup: InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8)),
+                reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))},
             });
     };
 

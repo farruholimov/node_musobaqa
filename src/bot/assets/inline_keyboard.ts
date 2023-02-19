@@ -55,52 +55,29 @@ const InlineKeyboards = {
             .text(days[6], `select_day?day=${days[6]}`)
             .text('Orqaga ↩️', `back?step=master_menu`),
 
-    times_menu: (times: string[], page = 1, countPage = 10) =>
-        new InlineKeyboard()
-            .text(
-                `${times[0]['busy'] ? '❌' : ''}${times[0]['start_time']}-${times[0]['end_time']}`,
-                `update_time?id=${times[0]['id']}&page=${page}`
-            )
-            .text(
-                `${times[1]['busy'] ? '❌' : ''}${times[1]['start_time']}-${times[1]['end_time']}`,
-                `update_time?id=${times[1]['id']}&page=${page}`
-            )
-            .row()
-            .text(
-                `${times[2]['busy'] ? '❌' : ''}${times[2]['start_time']}-${times[2]['end_time']}`,
-                `update_time?id=${times[2]['id']}&page=${page}`
-            )
-            .text(
-                `${times[3]['busy'] ? '❌' : ''}${times[3]['start_time']}-${times[3]['end_time']}`,
-                `update_time?id=${times[3]['id']}&page=${page}`
-            )
-            .row()
-            .text(
-                `${times[4]['busy'] ? '❌' : ''}${times[4]['start_time']}-${times[4]['end_time']}`,
-                `update_time?id=${times[4]['id']}&page=${page}`
-            )
-            .text(
-                `${times[5]['busy'] ? '❌' : ''}${times[5]['start_time']}-${times[5]['end_time']}`,
-                `update_time?id=${times[5]['id']}&page=${page}`
-            )
-            .row()
-            .text(
-                `${times[6]['busy'] ? '❌' : ''}${times[6]['start_time']}-${times[6]['end_time']}`,
-                `update_time?id=${times[6]['id']}&page=${page}`
-            )
-            .text(
-                `${times[7]['busy'] ? '❌' : ''}${times[7]['start_time']}-${times[7]['end_time']}`,
-                `update_time?id=${times[7]['id']}&page=${page}`
-            )
-            .row()
-            .text('◀️', `my_times?page=${Number(page) ? Number(page) - 1 : 0}&day=${times[0]['day']}`)
-            .text(`${page}/${countPage}`)
-            .text(
-                '▶️',
-                `my_times?page=${Number(page) ? Number(page) + 1 : 0 + 1}&day=${times[0]['day']}`
-            )
-            .row()
-            .text('Orqaga ↩️', `back?step=return_timetable`),
+    times_menu: (times: string[], page, countPage) => {
+        var result = []
+        var row =[]
+
+        times.forEach((time, i) => {
+            row.push({
+                text: `${time['busy'] ? '❌' : ''}${time['start_time']}-${time['end_time']}`,
+                callback_data:`update_time?id=${time['id']}&page=${page}`
+            })
+            if(i %2 !=0) {
+                result.push(row)
+                row=[]
+            }
+        })
+        result.push([
+            {text :'◀️', callback_data :`my_times?page=${Number(page) - 1}&day=${times[0]['day']}`},
+            {text: `${page}/${countPage-1}`, callback_data: 'jimijimi'},
+            {text: '▶️', callback_data: `my_times?page=${Number(page) + 1}&day=${times[0]['day']}`}
+        ])
+        result.push([{text: 'Orqaga ↩️', callback_data: `back?step=return_timetable`}])
+        
+        return result
+    },
 
     orders_menu_switch: (page, step) =>
         new InlineKeyboard()

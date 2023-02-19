@@ -69,7 +69,7 @@ export default class MastersDAO {
       .groupBy('masters.id', 'users.user_id')
       .limit(limit)
       .offset(offset)
-      .orderBy(`masters.rating`, 'desc') 
+      .orderBy(`rating`, 'desc') 
       .andWhere(filters) 
   }
 

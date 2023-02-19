@@ -352,6 +352,20 @@ export default class TgBot {
                         console.log(error);
                     }
                     break;
+                case "rate_users":
+                    try {
+                            await this.usersController.rateUsers(ctx)
+                    } catch (error) {
+                            console.log(error);
+                    }
+                    break;
+                case "rating":
+                    try {
+                            console.log(query)
+                    } catch (error) {
+                            console.log(error);
+                    }
+                    break;
 
 
                 case "skip":

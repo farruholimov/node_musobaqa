@@ -99,7 +99,7 @@ export default class TgBot {
 
             if (user.step == "idle") {
                 if (user.role_id == 2) await this.mastersController.sendMainMenu(ctx)
-                else await this.usersController.sendMainMenu(ctx)
+                else if (user.role_id == 3) await this.usersController.sendMainMenu(ctx)
             } else {
                 next();
             }
@@ -107,7 +107,8 @@ export default class TgBot {
 
         bot.command("admin", async (ctx, next) => {
             const user = await this.userService.getByChatId(String(ctx.msg.chat.id))
-
+            console.log(user);
+            
             if (user.role_id == 1) {
                 ctx.session.is_admin = true
                 ctx.reply(messages.switchedToAdminMsg, {

@@ -297,7 +297,7 @@ export default class MastersController {
         Reyting:\n${new Array(master.rating).fill("⭐️")}
         `
 
-        const reply_markup = ctx.session.is_admin ?  InlineKeyboards.master_register_menu : InlineKeyboards.master_info_menu
+        const reply_markup = ctx.session.is_admin ?  InlineKeyboards.master_register_menu(master.id) : InlineKeyboards.master_info_menu(master.id)
 
         await ctx.reply(message, {
             parse_mode: 'HTML',

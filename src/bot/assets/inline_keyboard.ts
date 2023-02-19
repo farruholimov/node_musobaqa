@@ -35,13 +35,23 @@ const InlineKeyboards = {
     search_sections_menu: new InlineKeyboard()
         .text("Ism bo'yicha izlash", 'search_by_name')
         .row()
-        .text("Reyting bo'yicha tartiblash", 'sort_by_rating')
+        .text("Reyting bo'yicha tartiblash", 'order_by_rating')
         .row()
         .text('Orqaga', 'back?step=section_masters'),
 
     user_roles_menu: new InlineKeyboard()
         .text('Usta', 'set_user_role?role=2')
         .text('Mijoz', 'set_user_role?role=3'),
+
+    master_info_menu: (master_id) => new InlineKeyboard()
+        .text('Vaqt olish', `book_time?master_id=${master_id}`)
+        .text('Baholash', `rate_master?master_id=${master_id}`)
+        .text('Ortga', 'back?step=section_masters'),
+
+    master_register_menu: (master_id) => new InlineKeyboard()
+        .text('Tasdiqlash', `accept_master?master_id=${master_id}`)
+        .text('Bekor qilish', `reject_master?master_id=${master_id}`)
+        .text('Ortga', 'back?step=section_masters'),
 
     days_menu: (days: string[]) =>
         new InlineKeyboard()
@@ -114,10 +124,10 @@ const InlineKeyboards = {
             let menu = [
                 [{
                     text: "◀️",
-                    callback_data: `section_masters?page=${Number(page) ? Number(page) - 1 : 0}`
+                    callback_data: `prev_masters?page=${Number(page) - 1}`
                 },{
                     text: "▶️",
-                    callback_data: `section_masters?page=${Number(page) ? Number(page) + 1: 0 + 1}`
+                    callback_data: `next_masters?page=${Number(page) + 1}`
                 }],
                 [{
                     text: "Orqaga ↩️",

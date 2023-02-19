@@ -87,6 +87,9 @@ export default class MastersController {
         desc ? query["order"] = "DESC" : null        
         
         const masters = await this.masterService.getAll(query)
+        console.log(masters);
+        console.log(page);
+        
         
         if (!masters || !masters.length) {
             await ctx.api.answerCallbackQuery(ctx.callbackQuery.id, {
@@ -118,7 +121,7 @@ export default class MastersController {
         {
             parse_mode: "HTML",
             reply_markup: {
-                inline_keyboard: InlineKeyboards.masters_menu_switch(masters)
+                inline_keyboard: InlineKeyboards.masters_menu_switch(masters, page)
             },
         })
     }
@@ -255,9 +258,11 @@ export default class MastersController {
         Reyting:\n${new Array(master.rating).fill("⭐️")}
         `
 
+        const reply_markup = ctx.session.is_admin ?  InlineKeyboards.master_register_menu : InlineKeyboards.master_info_menu
+
         await ctx.reply(message, {
             parse_mode: 'HTML',
-            reply_markup: InlineKeyboards.verify_info,
+            reply_markup,
         });
     };
 
@@ -295,6 +300,29 @@ export default class MastersController {
         //     text: message,
         //     user_id: user.user_id
         // })
+    };
+
+    public acceptMaster = async (ctx, master_id) => {
+        const master = await this.masterService.getByChatId(
+            master_id
+        );
+        const user = await this.userService.getById(master.user_id);
+
+        await this.masterService.update(master.id, {
+            is_verified: true,
+        })
+        await ctx.api.sendMessage(user.chat_id, messages.youGotAccepteddMsg, {
+            parse_mode: "HTML"
+        })
+    };
+
+    public rejectMaster = async (ctx, master_id) => {
+        const master = await this.masterService.getById(master_id);
+        const user = await this.userService.getById(master.user_id);
+        await ctx.api.sendMessage(user.chat_id, messages.youGotRejectedMsg, {
+            parse_mode: "HTML"
+        })
+        await this.masterService.deleteMasterByUserId(user.user_id)
     };
 
     public checkVerification = async (ctx) => {

@@ -37,6 +37,7 @@ export default class OrdersDAO {
 
  async getAll( filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
+    console.log(filters)
     return await KnexService('orders') 
       .from('orders')
       .select([
@@ -48,7 +49,7 @@ export default class OrdersDAO {
         'users.user_id as users.user_id', 
         'users.full_name as users.full_name', 
         'users.phone as users.phone', 
-        'masters.id as masters.id', 
+        'masters.id', 
         'masters.address as masters.address',
         'masters.brand_name as masters.brand_name',
         'calendars.id as calendars.id',
@@ -59,11 +60,11 @@ export default class OrdersDAO {
       ])
       .innerJoin('users', 'users.user_id', 'orders.user_id')
       .innerJoin('masters', 'masters.id', 'orders.master_id')
-      .innerJoin('calendar', 'calendar.id', 'orders.calendar_id')
+      .innerJoin('calendars', 'calendars.id', 'orders.calendar_id')
+      .andWhere(filters) 
       .limit(limit)
       .offset(offset)
       .orderBy(`orders.${orderBy}`, order) 
-      .andWhere(filters) 
       .groupBy('orders.id', 'users.user_id', 'masters.id', 'calendars.id')
   }  
 }

@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex.raw(`
   create table if not exists sections(
-    id uuid primary key default uuid_generate_v4(), 
+    id serial primary key, 
     name varchar(128)
   ); `
   

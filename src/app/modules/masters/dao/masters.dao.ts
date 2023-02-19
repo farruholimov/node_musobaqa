@@ -48,6 +48,7 @@ export default class MastersDAO {
     const {limit, offset, order, orderBy} = sorts
     return await KnexService('masters')
       .select([
+        'masters.id',
         'masters.brand_name',
         'masters.address',
         'masters.average_time',
@@ -56,12 +57,48 @@ export default class MastersDAO {
         'masters.end_time',
         'masters.is_verified',
         'masters.section_id',
-        'masters.user_id', 
-      ]) 
+        'masters.user_id',
+        'users.user_id', 
+        'users.full_name as full_name', 
+        'users.phone as phone', 
+      ])
+      .leftJoin('users', 'users.user_id', 'masters.user_id')
+      .leftJoin('ratings', 'masters.id', 'ratings.master_id')
+      .avg('ratings.rating as rating') 
+      .groupBy('masters.id', 'users.user_id')
       .limit(limit)
       .offset(offset)
       .orderBy(`masters.${orderBy}`, order) 
       .andWhere(filters) 
+  }
+
+  async getByUserId(user_id) { 
+    return getFirst(
+      await KnexService('masters')
+      .select([
+        'masters.id',
+        'masters.brand_name',
+        'masters.address',
+        'masters.average_time',
+        'masters.target',
+        'masters.start_time',
+        'masters.end_time',
+        'masters.is_verified',
+        'masters.section_id',
+        'masters.user_id',
+        'users.user_id', 
+        'users.full_name as full_name', 
+        'users.phone as phone', 
+      ])
+      .leftJoin('users', 'users.user_id', 'masters.user_id')
+      .leftJoin('ratings', 'masters.id', 'ratings.master_id')
+      .avg('ratings.rating as rating')
+      .where({
+        'masters.user_id': user_id
+      })
+      .groupBy('masters.id', 'users.user_id')
+
+    )
   }
 
   async verifyMaster(id: string) {

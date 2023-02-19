@@ -1,13 +1,19 @@
+import  CalendarsService  from './../calendars/calendar.service';
 import { ICreateMaster } from './../masters/interface/masters.interface';
 import MastersService from '../masters/masters.service';
 import UsersDAO from './dao/users.dao';
 import { ICreateUser, IUpdateUser } from './interface/users.interface';
 import ErrorResponse from '../shared/utils/errorResponse'; 
 import extractQuery from '../shared/utils/extractQuery';
+import { createCalendar } from '../shared/utils/createCalendar';
 
 export default class UsersService {
   private usersDao = new UsersDAO();
   private mastersService = new MastersService(); 
+  private calendarsService = new CalendarsService()
+
+
+
   async registerUser({ full_name, phone, latitude, longitude, chat_id, step, role_id }: ICreateUser) {
 
     const user = await this.getByChatId(chat_id);
@@ -79,7 +85,18 @@ export default class UsersService {
 
       const master = await this.mastersService.create({
         brand_name,  address, average_time, target, start_time, end_time, section_id, user_id: new_user.user_id
-      })
+      });
+
+      const slots = await createCalendar(master.start_time, master.end_time, master.average_time);
+
+      for await(let slot of slots) {
+        await this.calendarsService.create({
+          start_time: slot.startTime, 
+          end_time: slot.endTime,
+          day: slot.day,
+          master_id: master.id
+        })
+      }
  
       return {
         ...new_user,

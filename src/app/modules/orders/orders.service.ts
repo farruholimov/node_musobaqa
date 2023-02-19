@@ -26,7 +26,7 @@ async create({
     return await this.ordersDao.update(id, values);
   }
 
-  async getAll( query?) {
+  async getAll(query?) {
 
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters 
@@ -35,5 +35,5 @@ async create({
 
     return await this.ordersDao.getAll(filters, sorts);
   } 
- 
+  
 }

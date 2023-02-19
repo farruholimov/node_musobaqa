@@ -27,7 +27,7 @@ export default class CalendarsService {
     return this.calendarsDao.update(id, values);
   }
 
-  getAll( query) {
+  getAll( query?) {
 
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  

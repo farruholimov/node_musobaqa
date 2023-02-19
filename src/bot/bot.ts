@@ -248,10 +248,7 @@ export default class TgBot {
                 case 'set_user_role':
                     try {
                         if (query.role == 2) {
-                            await this.usersController.setUserRole(
-                                ctx,
-                                query.role
-                            );
+                            await this.usersController.setUserRole(ctx, query.role);
                             await this.msgController.sendSections(ctx, true);
                             await this.usersController.updateStep(
                                 ctx,
@@ -259,10 +256,7 @@ export default class TgBot {
                             );
                         } else {
                             await this.usersController.sendMainMenu(ctx, true);
-                            await this.usersController.updateStep(
-                                ctx,
-                                'section'
-                            );
+                            await this.usersController.updateStep(ctx, 'section');
                         }
                     } catch (error) {
                         console.log(error);
@@ -322,20 +316,14 @@ export default class TgBot {
                 case 'contact_admin':
                     try {
                         await this.msgController.askMessage(ctx);
-                        await this.usersController.updateStep(
-                            ctx,
-                            'message_to_admin'
-                        );
+                        await this.usersController.updateStep(ctx, 'message_to_admin');
                     } catch (error) {
                         console.log(error);
                     }
                     break;
                 case 'my_clients':
                     try {
-                        await this.ordersController.sendMasterOrders(
-                            ctx,
-                            query.page
-                        );
+                        await this.ordersController.sendMasterOrders(ctx, query.page);
                     } catch (error) {
                         console.log(error);
                     }
@@ -356,30 +344,21 @@ export default class TgBot {
                     break;
                 case 'select_day':
                     try {
-                        await this.mastersController.sendTimes(
-                            ctx,
-                            true,
-                            query
-                        );
+                        await this.mastersController.sendTimes(ctx, true, query);
                     } catch (error) {
                         console.log(error);
                     }
                     break;
                 case 'services':
                     try {
-                        await this.msgController.sendSections(ctx, true, "section_masters", query.step)
-                        await this.msgController.sendSections(ctx, true);
+                        await this.msgController.sendSections(ctx, true, "section_masters", "user_menu")
                     } catch(error){
                         console.log(error);
                     }
                     break;
                 case 'select_day':
                     try {
-                        await this.mastersController.sendTimes(
-                            ctx,
-                            true,
-                            query
-                        );
+                        await this.mastersController.sendTimes(ctx, true, query);
                     } catch (error) {
                         console.log(error);
                     }
@@ -515,6 +494,14 @@ export default class TgBot {
                                     ctx,
                                     'idle'
                                 );
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            break;
+                        case 'user_menu':
+                            try {
+                                await this.usersController.sendMainMenu(ctx, true);
+                                await this.usersController.updateStep(ctx, 'idle');
                             } catch (error) {
                                 console.log(error);
                             }

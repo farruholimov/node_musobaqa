@@ -87,6 +87,7 @@ export default class UsersDAO {
         "users.user_id",
         "users.full_name",
         "users.phone", 
+        "users.step", 
         "users.longitude", 
         "users.latitude", 
         "users.created_at",

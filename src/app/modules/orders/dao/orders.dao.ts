@@ -48,26 +48,33 @@ export default class OrdersDAO {
         'orders.status',
         'orders.is_verified',
         'orders.status',
-        'users.user_id as users.user_id', 
-        'users.full_name as users.full_name', 
-        'users.phone as users.phone', 
+        'users.user_id as user.user_id', 
+        'users.full_name as user.full_name', 
+        'users.phone as user.phone', 
         'masters.id', 
-        'masters.address as masters.address',
-        'masters.brand_name as masters.brand_name',
-        'calendars.id as calendars.id',
-        'calendars.start_time as calendars.start_time',
-        'calendars.end_time as calendars.end_time',
-        'calendars.day as calendars.day'
+        'masters.address as master.address',
+        'masters.brand_name as master.brand_name',
+        'calendars.id as calendar.id',
+        'calendars.start_time as calendar.start_time',
+        'calendars.end_time as calendar.end_time',
+        'calendars.day as calendar.day',
+        'section_name as section_name',
 
       ])
       .innerJoin('users', 'users.user_id', 'orders.user_id')
-      .innerJoin('masters', 'masters.id', 'orders.master_id')
+      .innerJoin(function(){
+        this.select("masters.id", "address", "brand_name", "sections.name as section_name")
+        .from("masters")
+        .as("masters")
+        .leftJoin("sections", {"masters.section_id": "sections.id"})
+        .groupBy("masters.id", "sections.id")
+      }, 'masters.id', 'orders.master_id')
       .innerJoin('calendars', 'calendars.id', 'orders.calendar_id')
       .andWhere(filters) 
       .limit(limit)
       .offset(offset)
       .orderBy(`orders.${orderBy}`, order) 
-      .groupBy('orders.id', 'users.user_id', 'masters.id', 'calendars.id')
+      .groupBy('orders.id', 'users.user_id', 'masters.id', "masters.address", "masters.brand_name", "masters.section_name", 'calendars.id')
   } ;
 
 

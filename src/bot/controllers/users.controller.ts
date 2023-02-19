@@ -12,6 +12,22 @@ export default class UsersController{
         })
     }
 
+    public sendMainMenu = async (ctx, edit: boolean = false) => {
+        if (edit) 
+            await ctx.api.editMessageText(
+                ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id,
+                messages.menuMsg,
+            {
+                parse_mode: "HTML",
+                reply_markup: InlineKeyboards.user_menu
+            })
+        else
+            await ctx.reply(messages.menuMsg, {
+                parse_mode: "HTML",
+                reply_markup: InlineKeyboards.user_menu,
+            })
+    }
+
     public setUserRole = async (ctx, role) => {
         ctx.session.user_data.role_id = role
         await this.userService.updateByChatId(ctx.msg.chat.id, {
@@ -28,7 +44,7 @@ export default class UsersController{
 
     public setPhone = async (ctx, phone) => {
         if (ctx.msg.text && !(/^\+\998[389][012345789][0-9]{7}$/).test(ctx.msg.text)) {
-            await ctx.reply(messages[ctx.session.user.lang].invalidNumberMsg, {
+            await ctx.reply(messages.invalidNumberMsg, {
                 parse_mode: "HTML",
             })
             throw new Error("Invalid phone number")
@@ -39,21 +55,5 @@ export default class UsersController{
         await this.userService.updateByChatId(ctx.msg.chat.id, {
             phone: phone
         })
-    }
-
-    public setBrandName = async (ctx, brand_name) => {
-        ctx.session.master_data.brand_name = brand_name
-    }
-
-    public setAddress = async (ctx, address) => {
-        ctx.session.master_data.address = address
-    }
-
-    public setAddressTarget = async (ctx, target) => {
-        ctx.session.master_data.target = target
-    }
-
-    public setLocation = async (ctx, target) => {
-        ctx.session.master_data.target = target
     }
 }

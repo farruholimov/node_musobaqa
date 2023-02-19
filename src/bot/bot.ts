@@ -59,6 +59,7 @@ export default class TgBot {
                 },
                 messages_to_delete: [],
                 message_ids: {},
+                chosen_section_id: null,
                 editing_item: {
                     item_id: null,
                     message_id: null,
@@ -311,7 +312,7 @@ export default class TgBot {
                     break;
                 case "services":
                     try {
-                        await this.msgController.sendSections(ctx, true)
+                        await this.msgController.sendSections(ctx, true, "section_masters")
                     } catch (error) {
                         console.log(error);
                     }
@@ -319,6 +320,34 @@ export default class TgBot {
                 case "chosen_services":
                     try {
                         await this.ordersController.sendUserOrders(ctx, true)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "section_masters":
+                    try {
+                        await this.mastersController.sendSectionMasters(ctx, null, query.section_id)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "select_master":
+                    try {
+                        await this.mastersController.sendMasterInfo(ctx, query.master_id)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "search_master":
+                    try {
+                        await this.mastersController.sendMasterInfo(ctx, query.master_id)
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
+                case "order_by_rating":
+                    try {
+                        await this.mastersController.sendSectionMasters(ctx, query.master_id)
                     } catch (error) {
                         console.log(error);
                     }

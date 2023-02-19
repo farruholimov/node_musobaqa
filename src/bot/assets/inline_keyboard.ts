@@ -55,13 +55,67 @@ const InlineKeyboards = {
             .text("Buyurtmani tasdiqlash", `order_verification`)
             .text("Orqaga ↩️", `back?step=${step}`),
 
+        search_sections_menu: (step) =>
+            new InlineKeyboard()
+            .text("Ism bo'yicha qidirish", `search_by_name`)
+            .row()
+            .text("Reyting bo'yicha tartiblash", `order_by_rating`)
+            .row()
+            .text("Orqaga ↩️", `back?step=${step}`),
+
+        masters_menu_switch: (masters, page) => {
+            let menu = [
+                [{
+                    text: "◀️",
+                    callback_data: `section_masters?page=${Number(page) ? Number(page) - 1 : 0}`
+                },{
+                    text: "▶️",
+                    callback_data: `section_masters?page=${Number(page) ? Number(page) + 1: 0 + 1}`
+                }],
+                [{
+                    text: "Orqaga ↩️",
+                    callback_data: `back?step=idle&menu=services`
+                },{
+                    text: "Izlash 🔍",
+                    callback_data: `search_master`
+                }]
+            ]
+            if (!masters.length) return menu
+
+            const first_row = []
+            const second_row = []
+
+            for (let i = 0; i < masters.length; i++) {
+                const master = masters[i]
+                let index = i+1
+
+                const master_text = `${index}. ${master.full_name} \n${master.rating} \n${master.location}`
+
+                if (first_row.length < Math.ceil(masters.length / 2)) {
+                    first_row.push({
+                        text: master_text,
+                        callback_data: `select_master?master_id=${master.id}`
+                    })
+                }
+                else{
+                    second_row.push({
+                        text: master_text,
+                        callback_data: `select_master?master_id=${master.id}`
+                    })
+                }
+            }
+            menu.unshift(second_row)
+            menu.unshift(first_row)
+            return menu
+        },
+
         menu_switch: (page, step) => new InlineKeyboard()
             .text("◀️", `prev?page=${Number(page) ? Number(page) - 1 : 0}`)
             .text("▶️", `next?page=${Number(page) ? Number(page) + 1: 0 + 1}`)
             .row()
             .text("Orqaga ↩️", `back?step=${step}`),
 
-        user_sections: (sections) => {
+        user_sections: (sections, command) => {
             let menu = [
                 [{
                     text: "Orqaga",
@@ -72,7 +126,7 @@ const InlineKeyboards = {
             for (const section of sections) {
                 menu.unshift([{
                     text: section.name,
-                    callback_data: `set_section?section_id=${section.id}`
+                    callback_data: `${command}?section_id=${section.id}`
                 }])
             }
             return menu

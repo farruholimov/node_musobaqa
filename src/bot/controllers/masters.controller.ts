@@ -66,6 +66,48 @@ export default class MastersController{
             })
     }
 
+    public sendSectionMasters = async (ctx, page, section_id) => {
+        ctx.session.chosen_section_id = section_id
+        const query = page ? { 
+            "masters.section_id": section_id,
+            page: page
+        } : { "masters.section_id": section_id }
+
+        const masters = await this.masterService.getAll(query)
+
+        if (!masters || !masters.length) {
+            await ctx.api.answerCallbackQuery(ctx.callbackQuery.id, {
+                text: messages.noMastersMsg,
+                show_alert: true,
+                parse_mode: "HTML"
+            })
+            throw new Error("No Masters")
+        }
+
+        let list_message = ""
+        const keyboard_data = []
+
+        for (let i = 0; i < masters.length; i ++) {
+            let order = masters[i]
+            let index = i+1
+
+            keyboard_data.push({
+                id: order.id,
+                index
+            })
+
+            list_message += `${i+1}. 🗓 ${order["calendar.day"]} \n🕖 ${order["calendar.start_time"]} \n👤 ${order["user.full_name"]} \n📞 ${order["user.phone"]}`
+        }
+
+        await ctx.api.editMessageText(
+            ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id,
+            list_message, 
+        {
+            parse_mode: "HTML",
+            reply_markup: InlineKeyboards.orders_menu_switch(page, "master_menu"),
+        })
+    }
+
     public setSection = async (ctx, section) => {
         ctx.session.master_data.section_id = section
     }
@@ -111,8 +153,7 @@ export default class MastersController{
         }
 
         const message = 
-        `
-        Ism: ${data.full_name}
+        `Ism: ${data.full_name}
         Telefon raqam: ${data.phone}
         Brend nomi: ${data.brand_name}
         Manzil: ${data.address}
@@ -121,6 +162,27 @@ export default class MastersController{
         Ish boshlash vaqti: ${data.start_time}
         Ish tugash vaqti: ${data.end_time}
         Mijozga sarflanadigan o'rtcha vaqt: ${data.average_time}
+        `
+
+        await ctx.reply(message, {
+            parse_mode: "HTML",
+            reply_markup: InlineKeyboards.verify_info
+        })
+    }
+
+    public sendMasterInfo = async (ctx, master_id: string) => {
+        const master =  await this.masterService.getById(master_id)
+
+        const message = 
+        `Ism: ${master.full_name}
+        Telefon raqam: ${master.phone}
+        Nomi: ${master.brand_name}
+        Manzil: ${master.address}
+        Mo'ljal: ${master.target}
+        Joylashuv: ${master.location}
+        Ish boshlash vaqti: ${master.start_time}
+        Ish tugash vaqti: ${master.end_time}\n\n
+        Reyting:\n${new Array(master.rating).fill("⭐️")}
         `
 
         await ctx.reply(message, {

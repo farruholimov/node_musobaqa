@@ -21,7 +21,7 @@ export default class MessagesController{
             })
     }
 
-    public sendSections = async (ctx, edit: boolean = false) => {
+    public sendSections = async (ctx, edit: boolean = false, command = "set_section") => {
 
         const data = await this.sectionService.getAll()
 
@@ -32,14 +32,14 @@ export default class MessagesController{
             {
                 parse_mode: "HTML",
                 reply_markup: {
-                    inline_keyboard: InlineKeyboards.user_sections(data)
+                    inline_keyboard: InlineKeyboards.user_sections(data, command)
                 }
             })
         else
             await ctx.reply(messages.selectSectionMsg, {
                 parse_mode: "HTML",
                 reply_markup: {
-                    inline_keyboard: InlineKeyboards.user_sections(data)
+                    inline_keyboard: InlineKeyboards.user_sections(data, command)
                 },
             })
     }

@@ -55,6 +55,10 @@ export default class MastersService {
     return this.mastersDao.getByUserId(user.user_id)
   } 
 
+  async getById (id) { 
+    return this.mastersDao.getById(id)
+  } 
+
   verifyMaster(id: string) {
     return this.mastersDao.verifyMaster(id);
   } 

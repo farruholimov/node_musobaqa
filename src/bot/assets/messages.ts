@@ -18,6 +18,7 @@ const messages = {
     notVerifiedMsg: "Ma'lumotlaringiz hali tasdiqlanmagan.",
     enterMessageMsg: "Habarni (savol, shikoyat, taklif) kiriting:",
     noClientsMsg: "Hozircha mijozlaringiz yo'q.",
+    noMastersMsg: "Hozircha hizmat ko'rsatuvchilar yo'q.",
     noOrdersMsg: "Hozircha belgilangan xizmatlar yo'q.",
     regSuccessMsg: "✅ Ro'yhatdan muvaffaqiyatli o'tdingiz!",
     orderFirstStep: "<b>Quyidagi saytdan kerakli mahsulotning rasmini (screenshot) yoki linkini yuboring.</b> \n----------------------------------------------------------------------\n 👉 https://telegra.ph/Aksessuarlar-03-07 👈\n----------------------------------------------------------------------\n\n<i>Mahsulotlarni yuborganingizdan so'ng davom etish uchun <b>Tasdiqlash</b> tugmasini bosing yoki buyurtma berishni to'xtatish uchun <b>Bekor qilish</b> tugmasini bosing.</i>",

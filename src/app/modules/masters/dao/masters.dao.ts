@@ -44,8 +44,9 @@ export default class MastersDAO {
     );
   }
 
-  async getAll(search:string = '', filters, sorts) {
-    const {limit, offset, order, orderBy} = sorts
+  async getAll(filters, sorts, search:string = '', ) {
+    const {limit, offset, order, orderBy} = sorts 
+    
     return await KnexService('masters')
       .select([
         'masters.id',
@@ -65,12 +66,12 @@ export default class MastersDAO {
       .leftJoin('users', 'users.user_id', 'masters.user_id')
       .leftJoin('ratings', 'masters.id', 'ratings.master_id')
       .avg('ratings.rating as rating') 
-      .whereILike('full_name', `%${search}%`)
+      .orWhereILike('full_name', `%${search}%`)
       .groupBy('masters.id', 'users.user_id')
       .limit(limit)
       .offset(offset)
-      .orderBy(`rating`, 'desc') 
-      .andWhere(filters) 
+      .orderBy('rating', order) 
+      .orWhere(filters)
   }
 
   async getByUserId(user_id) { 

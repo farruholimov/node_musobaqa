@@ -43,5 +43,11 @@ export default class CalendarDAO {
       .orderBy(`calendars.created_at`, 'asc') 
       .andWhere(filters) 
   } 
+
+  async getCount(filters) { 
+    return await KnexService('calendars')    
+      .andWhere(filters) 
+      .count('*')
+  } 
  
 }

@@ -8,7 +8,7 @@ export default class MastersService {
   private mastersDao = new MastersDAO();
   private usersDao = new UsersDAO()
 
-  create({ brand_name,
+  async create({ brand_name,
     address,
     average_time,
     target,
@@ -18,7 +18,7 @@ export default class MastersService {
     section_id, 
     user_id }: ICreateMaster) {
 
-    return this.mastersDao.create({
+    return await this.mastersDao.create({
       brand_name,
       address,
       average_time,
@@ -31,22 +31,26 @@ export default class MastersService {
     });
   }
 
-  update(user_id: string, values: IUpdateMaster) {
-    return this.mastersDao.update(user_id, values);
+ async update(user_id: string, values: IUpdateMaster) {
+    return await this.mastersDao.update(user_id, values);
   }
 
-  deleteMasterByUserId(user_id: string) {
-    return this.mastersDao.deleteMasterByUser(user_id);
+  async deleteMasterByUserId(user_id: string) {
+    return await this.mastersDao.deleteMasterByUser(user_id);
   }
 
-  getAll (search?, query?) {
+  async getAll (query?, search?) {
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  
     const sorts = extractedQuery.sorts 
 
 
-    return this.mastersDao.getAll(search, filters, sorts);
+    let jimi = await this.mastersDao.getAll(filters, sorts, search);
+    console.log(jimi);
+
+    return jimi
+    
   } 
 
   async getByChatId (chat_id) { 
@@ -59,18 +63,18 @@ export default class MastersService {
     return this.mastersDao.getById(id)
   } 
 
-  verifyMaster(id: string) {
-    return this.mastersDao.verifyMaster(id);
+  async verifyMaster(id: string) {
+    return await this.mastersDao.verifyMaster(id);
   } 
 
-  createRating({ 
+  async createRating({ 
     master_id,
     rating,
     comment,
     user_id 
   }: ICreateRating) {
 
-    return this.mastersDao.createRating({
+    return await this.mastersDao.createRating({
       master_id,
       rating,
       comment,
@@ -78,9 +82,9 @@ export default class MastersService {
     });
   }
 
-  getAllRatings(filters) { 
+  async getAllRatings(filters) { 
  
-    return this.mastersDao.getAllRatings(filters);
+    return await this.mastersDao.getAllRatings(filters);
   } 
 }
 

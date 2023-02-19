@@ -352,7 +352,7 @@ export default class TgBot {
                         console.log(error);
                     }
                     break;
-                case "rate_users":
+                case "rate_master":
                     try {
                             await this.usersController.rateUsers(ctx)
                     } catch (error) {

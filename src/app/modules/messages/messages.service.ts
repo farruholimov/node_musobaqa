@@ -3,9 +3,7 @@ import extractQuery from '../shared/utils/extractQuery';
 import MessagesDAO from './dao/messages.dao';
 
 export default class UsersService {
-  private messageDao = new MessagesDAO();
-
-
+  private messageDao = new MessagesDAO(); 
 
   async createMessage({ chat_id,comment }: ICreateMessage) {
 
@@ -37,6 +35,6 @@ export default class UsersService {
   }
 
   async getById(id: string) {
-    return this.messageDao.getById(id);
+    return await this.messageDao.getById(id);
   }
 }

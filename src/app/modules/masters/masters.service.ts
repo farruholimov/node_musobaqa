@@ -56,11 +56,11 @@ export default class MastersService {
   async getByChatId (chat_id) { 
     const user = await this.usersDao.getByChatId(chat_id)
 
-    return this.mastersDao.getByUserId(user.user_id)
+    return await this.mastersDao.getByUserId(user.user_id)
   } 
 
   async getById (id) { 
-    return this.mastersDao.getById(id)
+    return await this.mastersDao.getById(id)
   } 
 
   async verifyMaster(id: string) {

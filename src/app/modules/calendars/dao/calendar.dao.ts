@@ -38,7 +38,7 @@ export default class CalendarDAO {
  async getAll( filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
     return await KnexService('calendars') 
-      .limit(limit)
+      .limit(8)
       .offset(offset)
       .orderBy(`calendars.created_at`, 'asc') 
       .andWhere(filters) 

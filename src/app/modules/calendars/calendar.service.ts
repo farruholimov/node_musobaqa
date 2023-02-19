@@ -6,7 +6,7 @@ import { ICreateCalendar, IUpdateCalendar } from './interface/calendar.interface
 export default class CalendarsService {
   private calendarsDao = new CalendarDAO();
 
-  create({ 
+  async create({ 
     start_time,
     end_time, 
     master_id,
@@ -14,7 +14,7 @@ export default class CalendarsService {
     day
   }: ICreateCalendar) {
 
-    return this.calendarsDao.create({
+    return await this.calendarsDao.create({
       start_time,
       end_time, 
       master_id,

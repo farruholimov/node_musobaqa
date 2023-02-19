@@ -70,7 +70,7 @@ export default class UsersService {
   } 
 
   async getById(id: string) {
-    return this.usersDao.getById(id);
+    return await this.usersDao.getById(id);
   } 
 
   async registerMaster(data) {
@@ -106,6 +106,6 @@ export default class UsersService {
   }
 
   async updateByChatId(chatId: string, values: IUpdateUser) {
-    return this.usersDao.updateByChatId(chatId, values);
+    return await this.usersDao.updateByChatId(chatId, values);
   }
 }

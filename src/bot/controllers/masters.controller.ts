@@ -177,6 +177,46 @@ export default class MastersController {
             });
     };
 
+    public updateTimes = async (
+        ctx,
+        edit: boolean = false,
+        query: any,
+    ) => {
+        const page = query.page ? query.page : 1
+
+        const master = await this.masterService.getByChatId(
+            ctx.callbackQuery.message.chat.id
+        );
+        const time = await this.calendarsService.getOne({
+            id: query.id,
+            master_id: master.id,
+        });
+
+        await this.calendarsService.update(time.id, {busy: !time.busy})
+
+        const {times,count: [{count}] } = await this.calendarsService.getAll({
+            day: time.day,
+            master_id: master.id,
+            page
+        });
+
+        if (edit)
+            await ctx.api.editMessageText(
+                ctx.callbackQuery.message.chat.id,
+                ctx.callbackQuery.message.message_id,
+                messages.getTimessMessage(time.day),
+                {
+                    reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))}
+                    
+                }
+            );
+        else
+            await ctx.reply(messages.getTimessMessage(time.day), {
+                reply_markup: {inline_keyboard:InlineKeyboards.times_menu(times,page,Math.ceil(Number(count)/8))},
+            });
+        
+    };
+
     public setSection = async (ctx, section) => {
         ctx.session.master_data.section_id = section;
     };

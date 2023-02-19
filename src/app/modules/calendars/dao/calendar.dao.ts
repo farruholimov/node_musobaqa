@@ -44,6 +44,12 @@ export default class CalendarDAO {
       .andWhere(filters) 
   } 
 
+  async getOne(filters) { 
+    return getFirst(await KnexService('calendars')  
+    .where(filters)) 
+  } 
+
+
   async getCount(filters) { 
     return await KnexService('calendars')    
       .andWhere(filters) 

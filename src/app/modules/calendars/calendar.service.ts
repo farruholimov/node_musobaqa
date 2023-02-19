@@ -28,6 +28,10 @@ export default class CalendarsService {
         return await this.calendarsDao.update(id, values);
     }
 
+    async getOne(filters) {
+        return await this.calendarsDao.getOne(filters);
+    }
+
     async getAll(query?) {
         const extractedQuery = extractQuery(query);
         const filters = extractedQuery.filters;

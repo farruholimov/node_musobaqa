@@ -76,8 +76,12 @@ export default class MastersController{
         desc ? query["orderBy"] = "rating" : null
         desc ? query["order"] = "DESC" : null
 
+        console.log(query);
+        
+        
         const masters = await this.masterService.getAll(query)
-
+        console.log(masters);
+        
         if (!masters || !masters.length) {
             await ctx.api.answerCallbackQuery(ctx.callbackQuery.id, {
                 text: messages.noMastersMsg,

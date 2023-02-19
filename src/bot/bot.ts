@@ -312,7 +312,7 @@ export default class TgBot {
                     break;
                 case "services":
                     try {
-                        await this.msgController.sendSections(ctx, true, "section_masters")
+                        await this.msgController.sendSections(ctx, true, "section_masters", query.step)
                     } catch (error) {
                         console.log(error);
                     }
@@ -418,6 +418,14 @@ export default class TgBot {
                         case("section_masters"):
                             try {
                                 await this.mastersController.sendSectionMasters(ctx, null, ctx.session.chosen_section_id)
+                                await this.usersController.updateStep(ctx, "idle")
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            break;
+                        case("user_menu"):
+                            try {
+                                await this.usersController.sendMainMenu(ctx, true)
                                 await this.usersController.updateStep(ctx, "idle")
                             } catch (error) {
                                 console.log(error);

@@ -350,7 +350,7 @@ export default class MastersController {
         await this.masterService.update(master.id, {
             is_verified: true,
         })
-        await ctx.api.sendMessage(user.chat_id, messages.youGotAccepteddMsg, {
+        await ctx.api.sendMessage(user.chat_id, messages.acceptedMsg, {
             parse_mode: "HTML"
         })
     };
@@ -358,7 +358,7 @@ export default class MastersController {
     public rejectMaster = async (ctx, master_id) => {
         const master = await this.masterService.getById(master_id);
         const user = await this.userService.getById(master.user_id);
-        await ctx.api.sendMessage(user.chat_id, messages.youGotRejectedMsg, {
+        await ctx.api.sendMessage(user.chat_id, messages.notAcceptedMsg, {
             parse_mode: "HTML"
         })
         await this.masterService.deleteMasterByUserId(user.user_id)

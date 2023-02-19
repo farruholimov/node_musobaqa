@@ -32,6 +32,8 @@ const messages = {
     noOrdersMsg: "Hozircha belgilangan xizmatlar yo'q.",
     switchedToAdminMsg: "✅ Administrator rejimiga o'tdingiz!",
     notAdminMsg: "❌ Siz administrator emassiz!",
+    notAcceptedMsg: "❌ Siz administrator tomonidan tasdiqlanmadingiz!",
+    acceptedMsg: "✅ Siz administrator tomonidan tasdiqlandingiz!",
     orderFirstStep:
         "<b>Quyidagi saytdan kerakli mahsulotning rasmini (screenshot) yoki linkini yuboring.</b> \n----------------------------------------------------------------------\n 👉 https://telegra.ph/Aksessuarlar-03-07 👈\n----------------------------------------------------------------------\n\n<i>Mahsulotlarni yuborganingizdan so'ng davom etish uchun <b>Tasdiqlash</b> tugmasini bosing yoki buyurtma berishni to'xtatish uchun <b>Bekor qilish</b> tugmasini bosing.</i>",
     menuMsg: `📖 Asosiy menyu`,

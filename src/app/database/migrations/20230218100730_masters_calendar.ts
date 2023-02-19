@@ -7,9 +7,9 @@ export async function up(knex: Knex): Promise<void> {
   create table if not exists calendars(
     id uuid primary key default uuid_generate_v4(),  
     master_id uuid references masters(id) not null, 
-    day timestamp not null,
-    start_time timestamp not null,
-    end_time timestamp not null,
+    day varchar not null,
+    start_time varchar not null,
+    end_time varchar not null,
     busy bool default false,
     created_at timestamp not null default current_timestamp
     );

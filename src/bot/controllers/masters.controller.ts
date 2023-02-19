@@ -1,13 +1,16 @@
+import { createCalendar } from './../../app/modules/shared/utils/createCalendar';
 import messages from "../assets/messages"
 import InlineKeyboards from "../assets/inline_keyboard"
 import UsersService from "../../app/modules/users/users.service"
 import MastersService from "../../app/modules/masters/masters.service"
 import stringTimeValidator from "../utils/stringTimeValidator"
 import UsersController from "./users.controller"
+import CalendarsService from '../../app/modules/calendars/calendar.service';
 
 export default class MastersController{
     private userService = new UsersService()
     private masterService = new MastersService()
+    private calendarsService = new CalendarsService()
 
     private usersController = new UsersController()
 
@@ -129,10 +132,21 @@ export default class MastersController{
     public saveInfo = async (ctx) => {
         const data = ctx.session.master_data
         const user = await this.userService.getByChatId(ctx.callbackQuery.message.chat.id)
-        await this.masterService.create({
+        let mas = await this.masterService.create({
             ...data,
             user_id: user.user_id
         })
+
+        const slots = await createCalendar(data.start_time, data.end_time, data.average_time);
+
+        for await(let slot of slots) {
+          await this.calendarsService.create({
+            start_time: slot.startTime, 
+            end_time: slot.endTime,
+            day: slot.day,
+            master_id: mas.id
+          })
+        }
     }
 
     public saveAdminMessage = async (ctx, message: string) => {

@@ -9,7 +9,8 @@ export async function up(knex: Knex): Promise<void> {
     master_id uuid references masters(id) not null, 
     calendar_id uuid references calendars(id) not null,
     user_id uuid references users(user_id) not null,
-    status int default 0,
+    status int default 0, 
+    is_verified bool default false,
     created_at timestamp not null default current_timestamp
     );
 `);
@@ -24,7 +25,8 @@ export async function down(knex: Knex): Promise<void> {
 };
 
 // status 
-// 0
-// 
+// 0 created 
+// 1 verified
+// 2 
 
  

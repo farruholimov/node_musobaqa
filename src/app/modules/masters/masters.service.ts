@@ -35,6 +35,10 @@ export default class MastersService {
     return this.mastersDao.update(user_id, values);
   }
 
+  deleteMasterByUserId(user_id: string) {
+    return this.mastersDao.deleteMasterByUser(user_id);
+  }
+
   getAll (query?) {
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  

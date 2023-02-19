@@ -28,7 +28,6 @@ export default class CalendarsService {
   }
 
   getAll( query?) {
-
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  

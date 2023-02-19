@@ -109,6 +109,12 @@ export default class MastersDAO {
       .where({ id: id}) 
   }
 
+  async deleteMasterByUser(id: string) {
+    return await KnexService('masters')
+      .del()
+      .where({ user_id: id}) 
+  }
+
   async createRating({
     master_id,
     rating,

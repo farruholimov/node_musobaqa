@@ -46,6 +46,8 @@ export default class OrdersDAO {
         'orders.user_id',
         'orders.calendar_id',
         'orders.status',
+        'orders.is_verified',
+        'orders.status',
         'users.user_id as users.user_id', 
         'users.full_name as users.full_name', 
         'users.phone as users.phone', 
@@ -66,5 +68,51 @@ export default class OrdersDAO {
       .offset(offset)
       .orderBy(`orders.${orderBy}`, order) 
       .groupBy('orders.id', 'users.user_id', 'masters.id', 'calendars.id')
-  }  
+  } ;
+
+
+  async getOneByFilter( filters) { 
+    console.log(filters)
+    return getFirst(
+      await KnexService('orders') 
+      .from('orders')
+      .select([
+        'orders.master_id',
+        'orders.id',
+        'orders.user_id',
+        'orders.status',
+        'orders.is_verified',
+        'orders.calendar_id',
+        'orders.status',
+        'users.user_id', 
+        'users.full_name as full_name', 
+        'users.phone as phone', 
+        'masters.id', 
+        'masters.address as address',
+        'masters.brand_name as brand_name',
+        'calendars.id',
+        'calendars.start_time as start_time',
+        'calendars.end_time as end_time',
+        'calendars.day as day'
+
+      ])
+      .innerJoin('users', 'users.user_id', 'orders.user_id')
+      .innerJoin('masters', 'masters.id', 'orders.master_id')
+      .innerJoin('calendars', 'calendars.id', 'orders.calendar_id')
+      .andWhere(filters)   
+      .groupBy('orders.id', 'users.user_id', 'masters.id', 'calendars.id')
+    )
+  } ;
+
+
+  async verifyOrder(id: string) {
+    return getFirst(
+      await KnexService('orders')
+      .update({
+        is_verified: true
+      })
+      .where({ id: id})
+      .returning("*")
+    )
+  }
 }

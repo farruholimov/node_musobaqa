@@ -347,7 +347,7 @@ export default class TgBot {
                     break;
                 case "order_by_rating":
                     try {
-                        await this.mastersController.sendSectionMasters(ctx, query.master_id)
+                        await this.mastersController.sendSectionMasters(ctx, null, ctx.session.section_id, true)
                     } catch (error) {
                         console.log(error);
                     }
@@ -396,6 +396,14 @@ export default class TgBot {
                         case("master_menu"):
                             try {
                                 await this.mastersController.sendMainMenu(ctx, true)
+                                await this.usersController.updateStep(ctx, "idle")
+                            } catch (error) {
+                                console.log(error);
+                            }
+                            break;
+                        case("section_masters"):
+                            try {
+                                await this.mastersController.sendSectionMasters(ctx, null, ctx.session.chosen_section_id)
                                 await this.usersController.updateStep(ctx, "idle")
                             } catch (error) {
                                 console.log(error);

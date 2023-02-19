@@ -156,14 +156,13 @@ const InlineKeyboards = {
             .row()
             .text("🗑 O'chirish", `delete_item?item_id=${item_id}`),
 
-        user_info_menu: (step) =>
+        master_info_menu: (master_id) =>
             new InlineKeyboard()
-            .text("👤 Ismni o'zgartirish", `change_user_info?step=name`)
-            .text("📱 Raqamni o'zgartirish", `change_user_info?step=phone`)
+            .text("Vaqt Olish", `book_time?master_id=${master_id}`)
+            .text("Baholash", `rate_master?master_id=${master_id}`)
             .row()
-            .text("🇺🇿🇷🇺 Tilni o'zgartirish", `change_user_info?step=lang`)
-            .row()
-            .text("Orqaga ↩️", `back?step=${step}`),
+            .text("Orqaga ↩️", `back?step=section_masters`),
+
         order_sections_menu: (step) =>
             new InlineKeyboard()
             .text("🔵 Barchasi", `all_orders`)

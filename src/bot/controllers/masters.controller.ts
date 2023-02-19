@@ -66,12 +66,15 @@ export default class MastersController{
             })
     }
 
-    public sendSectionMasters = async (ctx, page, section_id) => {
+    public sendSectionMasters = async (ctx, page, section_id, desc = false) => {
         ctx.session.chosen_section_id = section_id
         const query = page ? { 
             "masters.section_id": section_id,
             page: page
         } : { "masters.section_id": section_id }
+
+        desc ? query["orderBy"] = "rating" : null
+        desc ? query["order"] = "DESC" : null
 
         const masters = await this.masterService.getAll(query)
 
@@ -88,15 +91,15 @@ export default class MastersController{
         const keyboard_data = []
 
         for (let i = 0; i < masters.length; i ++) {
-            let order = masters[i]
+            let master = masters[i]
             let index = i+1
 
             keyboard_data.push({
-                id: order.id,
+                id: master.id,
                 index
             })
 
-            list_message += `${i+1}. 🗓 ${order["calendar.day"]} \n🕖 ${order["calendar.start_time"]} \n👤 ${order["user.full_name"]} \n📞 ${order["user.phone"]}`
+            list_message += `${i+1}. 🗓 ${master["calendar.day"]} \n🕖 ${master["calendar.start_time"]} \n👤 ${master["user.full_name"]} \n📞 ${master["user.phone"]}`
         }
 
         await ctx.api.editMessageText(
@@ -187,7 +190,7 @@ export default class MastersController{
 
         await ctx.reply(message, {
             parse_mode: "HTML",
-            reply_markup: InlineKeyboards.verify_info
+            reply_markup: InlineKeyboards.master_info_menu
         })
     }
 

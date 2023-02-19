@@ -3,7 +3,7 @@ export interface ICreateCalendar {
    day: Date;
    start_time: Date;
    end_time: Date;
-   busy: Boolean;
+   busy?: Boolean;
 }
 
 export interface IUpdateCalendar {

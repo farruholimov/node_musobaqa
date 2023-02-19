@@ -14,6 +14,8 @@ export interface IUpdateUser {
   latitude?: string;
   longitude?: string;
   step?: string;
+  role_id?: number;
+
 }
 
 export interface IUser {
@@ -26,4 +28,5 @@ export interface IUser {
   latitude: string;
   chat_id: string;
   step: string;
+  role_id?: number;
 }

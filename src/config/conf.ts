@@ -16,7 +16,7 @@ export const pg = {
   host: env.PG_HOST || 'localhost',
   port: env.PG_PORT || 5432,
   user: env.PG_USER || 'postgres',
-  password: env.PG_PASSWORD || 'pgpwd',
+  password: env.PG_PASSWORD || 'q1w2e3',
   database: env.PG_DB_NAME || 'app_db',
   migrationsTable: env.PG_MIGRATIONS_TABLE || 'migrations',
   maxPool: 75,

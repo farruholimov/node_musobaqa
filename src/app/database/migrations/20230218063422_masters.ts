@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     start_time varchar,
     end_time varchar,  
     is_verified bool not null default false,
-    section_id uuid references sections(id),
+    section_id int references sections(id),
     user_id uuid references users(user_id),
     created_at timestamp not null default current_timestamp,
     updated_at timestamp not null default current_timestamp  

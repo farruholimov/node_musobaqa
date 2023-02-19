@@ -1,15 +1,18 @@
+import  CalendarsService  from './../calendars/calendar.service';
 import { ICreateMaster } from './../masters/interface/masters.interface';
 import MastersService from '../masters/masters.service';
 import UsersDAO from './dao/users.dao';
 import { ICreateUser, IUpdateUser } from './interface/users.interface';
-import ErrorResponse from '../shared/utils/errorResponse';
-import UserRoleService from './user_roles/user_roles.service';
+import ErrorResponse from '../shared/utils/errorResponse'; 
 import extractQuery from '../shared/utils/extractQuery';
+import { createCalendar } from '../shared/utils/createCalendar';
 
 export default class UsersService {
   private usersDao = new UsersDAO();
-  private mastersService = new MastersService();
-  private userRolesService = new UserRoleService()
+  private mastersService = new MastersService(); 
+  private calendarsService = new CalendarsService()
+
+
 
   async registerUser({ full_name, phone, latitude, longitude, chat_id, step, role_id }: ICreateUser) {
 
@@ -25,21 +28,15 @@ export default class UsersService {
       phone,
       latitude,
       chat_id,
-      step
-    });
-
-    if(role_id) {
-      const role = await this.userRolesService.create({
-        role_id: Number(role_id),
-        user_id: new_user.user_id
-      });
-    }
+      step, 
+      role_id
+    }); 
 
     return new_user
   }
 
   async update(id: string, values: IUpdateUser) {
-    return this.usersDao.update(id, values);
+    return await this.usersDao.update(id, values);
   }
 
   async getAll(key: string, keyword: string, query) {
@@ -49,30 +46,27 @@ export default class UsersService {
     const sorts = extractedQuery.sorts 
 
 
-    return this.usersDao.getAll(key, keyword, filters, sorts);
+    return await this.usersDao.getAll(key, keyword, filters, sorts);
   }
 
   async getByPhone(phone: string) {
-    return this.usersDao.getByPhone(phone);
+    return await this.usersDao.getByPhone(phone);
   } 
 
   async getByChatId(chatId: string) {
-    const user = this.usersDao.getByChatId(chatId); 
+    const user = await this.usersDao.getByChatId(chatId); 
 
-    const myRatings = await this.mastersService.getAllRatings({
-      master_id: user['master_id']
-    });
+    // const myRatings = await this.mastersService.getAllRatings({
+    //   master_id: user['master_id']
+    // });
 
-    const totalRating = myRatings.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue.rating;
-    }, 0);
+    // const totalRating = myRatings.reduce((accumulator, currentValue) => {
+    //   return accumulator + currentValue.rating;
+    // }, 0);
 
-    const averageRating = totalRating / myRatings.length;
+    // const averageRating = totalRating / myRatings.length;
 
-    return {
-      ...user,
-      rating: averageRating
-    }
+    return user
   } 
 
   async getById(id: string) {
@@ -87,17 +81,23 @@ export default class UsersService {
 
       if(user) throw new ErrorResponse(400, 'User already exists!');
 
-      const new_user = await this.registerUser({full_name, phone, latitude, longitude, chat_id, step});
+      const new_user = await this.registerUser({full_name, phone, latitude, longitude, chat_id, step, role_id});
 
       const master = await this.mastersService.create({
         brand_name,  address, average_time, target, start_time, end_time, section_id, user_id: new_user.user_id
-      })
-
-      const role = await this.userRolesService.create({
-        role_id: Number(role_id),
-        user_id: new_user.user_id
       });
-      
+
+      const slots = await createCalendar(master.start_time, master.end_time, master.average_time);
+
+      for await(let slot of slots) {
+        await this.calendarsService.create({
+          start_time: slot.startTime, 
+          end_time: slot.endTime,
+          day: slot.day,
+          master_id: master.id
+        })
+      }
+ 
       return {
         ...new_user,
         master
@@ -106,6 +106,6 @@ export default class UsersService {
   }
 
   async updateByChatId(chatId: string, values: IUpdateUser) {
-    return this.usersDao.update(chatId, values);
+    return this.usersDao.updateByChatId(chatId, values);
   }
 }

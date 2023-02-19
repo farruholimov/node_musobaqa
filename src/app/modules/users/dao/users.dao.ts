@@ -8,7 +8,10 @@ export default class UsersDAO {
     full_name,
     longitude,
     latitude,
-    phone
+    chat_id,
+    step,
+    phone,
+    role_id
   }: ICreateUser): Promise<IUser> {
     return getFirst(
       await KnexService('users')
@@ -16,7 +19,10 @@ export default class UsersDAO {
           full_name,
           longitude,
           latitude,
-          phone
+          chat_id,
+          step,
+          phone,
+          role_id
         })
         .returning('*'),
     );
@@ -44,9 +50,9 @@ export default class UsersDAO {
     );
   }
 
-  getAll(key: string, keyword: string, filters, sorts) {
+ async  getAll(key: string, keyword: string, filters, sorts) {
     const {limit, offset, order, orderBy} = sorts
-    return KnexService('users')
+    return await KnexService('users')
       .select([
         "users.user_id",
         "users.full_name",
@@ -54,49 +60,42 @@ export default class UsersDAO {
         "users.longitude", 
         "users.latitude", 
         "users.created_at",
-        "name as role",
-      ])
-      .innerJoin(function(){
-        this.select(["user_roles.id", "user_roles.user_id", "role_id", "name"])
-        .from("user_roles")
-        .as("user_roles")
-        .leftJoin({role: "roles"}, {"user_roles.role_id": "role.id"})
-        .whereNot("role_id", 1)
-        .groupBy("user_roles.id", "role.id")
-      }, {"users.user_id": "user_roles.user_id"})
+        "users.role_id", 
+      ]) 
       .limit(limit)
       .offset(offset)
       .orderBy(`users.${orderBy}`, order)
       .whereILike(`users.${key}`, `%${keyword}%`)
-      .andWhere(filters)
-      .groupBy("users.user_id", "user_roles.id", "user_roles.user_id", "name")
+      .andWhere(filters) 
   }
 
-  getById(id: string) {
-    return KnexService('users')
+  async getById(id: string) {
+    return  await KnexService('users')
       .where({ user_id: id})
       .first();
   }
 
-  getByPhone(phone: string) {
-    return KnexService('users')
+  async getByPhone(phone: string) {
+    return await KnexService('users')
       .where({ phone: phone})
       .first();
   } 
 
-  getByChatId(chat_id: string) {
-    return KnexService('users') 
+  async getByChatId(chat_id: string) {
+    return await KnexService('users') 
       .select([
         "users.user_id",
         "users.full_name",
         "users.phone", 
+        "users.step", 
         "users.longitude", 
         "users.latitude", 
         "users.created_at",
-        'masters.id as master_id'
+        "users.role_id",
+        'master.id as master_id'
       ])
-      .innerJoin({master: "masters"}, {"users.user_id": "masters.id"})
-      .groupBy('users.user_id', 'masters.id')
+      .leftJoin({master: "masters"}, {"users.user_id": "master.id"})
+      .groupBy('users.user_id', 'master.id')
       .where({ chat_id: chat_id}) 
       .first();
   } 

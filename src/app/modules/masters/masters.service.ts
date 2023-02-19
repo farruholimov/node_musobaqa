@@ -1,9 +1,12 @@
 import extractQuery from '../shared/utils/extractQuery';
+import UsersDAO from '../users/dao/users.dao';
+import UsersService from '../users/users.service';
 import MastersDAO from './dao/masters.dao';
 import { ICreateMaster, ICreateRating, IUpdateMaster } from './interface/masters.interface';
 
 export default class MastersService {
   private mastersDao = new MastersDAO();
+  private usersDao = new UsersDAO()
 
   create({ brand_name,
     address,
@@ -28,18 +31,28 @@ export default class MastersService {
     });
   }
 
-  update(id: string, values: IUpdateMaster) {
-    return this.mastersDao.update(id, values);
+  update(user_id: string, values: IUpdateMaster) {
+    return this.mastersDao.update(user_id, values);
   }
 
-  getAll(key: string, keyword: string, query) {
+  deleteMasterByUserId(user_id: string) {
+    return this.mastersDao.deleteMasterByUser(user_id);
+  }
+
+  getAll (query?) {
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  
     const sorts = extractedQuery.sorts 
 
 
-    return this.mastersDao.getAll(key, keyword, filters, sorts);
+    return this.mastersDao.getAll( filters, sorts);
+  } 
+
+  async getByChatId (chat_id) { 
+    const user = await this.usersDao.getByChatId(chat_id)
+
+    return this.mastersDao.getByUserId(user.user_id)
   } 
 
   verifyMaster(id: string) {
@@ -66,3 +79,6 @@ export default class MastersService {
     return this.mastersDao.getAllRatings(filters);
   } 
 }
+
+
+

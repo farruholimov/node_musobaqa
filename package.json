@@ -36,6 +36,7 @@
     "slugify": "^1.6.5",
     "swagger-ui-express": "^4.5.0",
     "tsoa": "^4.1.1",
+    "url-parse": "^1.5.10",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

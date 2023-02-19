@@ -58,39 +58,39 @@ const InlineKeyboards = {
     times_menu: (times: string[], page = 1, countPage = 10) =>
         new InlineKeyboard()
             .text(
-                `${times[0]['start_time']}-${times[0]['end_time']}`,
-                `update_time?id=${times[0]['id']}`
+                `${times[0]['busy'] ? '❌' : ''}${times[0]['start_time']}-${times[0]['end_time']}`,
+                `update_time?id=${times[0]['id']}&page=${page}`
             )
             .text(
-                `${times[1]['start_time']}-${times[1]['end_time']}`,
-                `update_time?id=${times[1]['id']}`
-            )
-            .row()
-            .text(
-                `${times[2]['start_time']}-${times[2]['end_time']}`,
-                `update_time?id=${times[2]['id']}`
-            )
-            .text(
-                `${times[3]['start_time']}-${times[3]['end_time']}`,
-                `update_time?id=${times[3]['id']}`
+                `${times[1]['busy'] ? '❌' : ''}${times[1]['start_time']}-${times[1]['end_time']}`,
+                `update_time?id=${times[1]['id']}&page=${page}`
             )
             .row()
             .text(
-                `${times[4]['start_time']}-${times[4]['end_time']}`,
-                `update_time?id=${times[4]['id']}`
+                `${times[2]['busy'] ? '❌' : ''}${times[2]['start_time']}-${times[2]['end_time']}`,
+                `update_time?id=${times[2]['id']}&page=${page}`
             )
             .text(
-                `${times[5]['start_time']}-${times[5]['end_time']}`,
-                `update_time?id=${times[5]['id']}`
+                `${times[3]['busy'] ? '❌' : ''}${times[3]['start_time']}-${times[3]['end_time']}`,
+                `update_time?id=${times[3]['id']}&page=${page}`
             )
             .row()
             .text(
-                `${times[6]['start_time']}-${times[6]['end_time']}`,
-                `update_time?id=${times[6]['id']}`
+                `${times[4]['busy'] ? '❌' : ''}${times[4]['start_time']}-${times[4]['end_time']}`,
+                `update_time?id=${times[4]['id']}&page=${page}`
             )
             .text(
-                `${times[7]['start_time']}-${times[7]['end_time']}`,
-                `update_time?id=${times[7]['id']}`
+                `${times[5]['busy'] ? '❌' : ''}${times[5]['start_time']}-${times[5]['end_time']}`,
+                `update_time?id=${times[5]['id']}&page=${page}`
+            )
+            .row()
+            .text(
+                `${times[6]['busy'] ? '❌' : ''}${times[6]['start_time']}-${times[6]['end_time']}`,
+                `update_time?id=${times[6]['id']}&page=${page}`
+            )
+            .text(
+                `${times[7]['busy'] ? '❌' : ''}${times[7]['start_time']}-${times[7]['end_time']}`,
+                `update_time?id=${times[7]['id']}&page=${page}`
             )
             .row()
             .text('◀️', `my_times?page=${Number(page) ? Number(page) - 1 : 0}`)

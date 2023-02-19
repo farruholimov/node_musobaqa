@@ -149,15 +149,20 @@ export default class MastersController {
     public sendTimes = async (
         ctx,
         edit: boolean = false,
-        query: { day: string }
+        query: { day: string, page: number},
+        page: number = 1
     ) => {
         const master = await this.masterService.getByChatId(
             ctx.callbackQuery.message.chat.id
         );
-        const times = await this.calendarsService.getAll({
+        const {times,count: [{count}] } = await this.calendarsService.getAll({
             day: query.day,
             master_id: master.id,
         });
+
+        console.log(count);
+        
+        
 
         if (edit)
             await ctx.api.editMessageText(
@@ -166,13 +171,13 @@ export default class MastersController {
                 messages.getTimessMessage(query.day),
                 {
                     parse_mode: 'HTML',
-                    reply_markup: InlineKeyboards.times_menu(times),
+                    reply_markup: InlineKeyboards.times_menu(times,page, Number(count)),
                 }
             );
         else
             await ctx.reply(messages.getTimessMessage(query.day), {
                 parse_mode: 'HTML',
-                reply_markup: InlineKeyboards.times_menu(times),
+                reply_markup: InlineKeyboards.times_menu(times,page,Number(count)),
             });
     };
 

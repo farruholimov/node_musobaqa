@@ -47,7 +47,6 @@ export default class MastersService {
 
 
     let jimi = await this.mastersDao.getAll(filters, sorts, search);
-    console.log(jimi);
 
     return jimi
     

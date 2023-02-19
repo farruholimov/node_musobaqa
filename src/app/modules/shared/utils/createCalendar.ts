@@ -1,9 +1,30 @@
+export const generateDays = async () => {
+    var days = [];
+
+    for (let i = 0; i < 7; i++) {
+        let DATE = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate() + i
+        );
+        let month =
+            DATE.getMonth() + 1 >= 10
+                ? DATE.getMonth() + 1
+                : '0' + (DATE.getMonth() + 1);
+
+        let day = DATE.getDate() >= 10 ? DATE.getDate() : '0' + DATE.getDate();
+        days.push(`${month}.${day}`);
+    }
+
+    return days;
+};
+
 export const createCalendar = async (
     startTime: string,
     endTime: string,
     avarageTime: string
 ) => {
-    var days = [];
+    var days = await generateDays();
     var times = [];
     var result = [];
     for (let i = 0; i < 7; i++) {

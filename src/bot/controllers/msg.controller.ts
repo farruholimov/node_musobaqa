@@ -24,7 +24,8 @@ export default class MessagesController{
     public sendSections = async (ctx, edit: boolean = false, command = "set_section", step = "user_roles_menu") => {
 
         const data = await this.sectionService.getAll()
-
+        console.log(InlineKeyboards.user_sections(data, command, step));
+        
         if (edit) 
             await ctx.api.editMessageText(
                 ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id,
@@ -41,6 +42,15 @@ export default class MessagesController{
                 reply_markup: {
                     inline_keyboard: InlineKeyboards.user_sections(data, command, step)
                 },
+            })
+    }
+    public sendMasterSearchMenu = async (ctx, edit: boolean = false) => {
+            await ctx.api.editMessageText(
+                ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id,
+                messages.selectSectionMsg,
+            {
+                parse_mode: "HTML",
+                reply_markup: InlineKeyboards.search_sections_menu
             })
     }
 

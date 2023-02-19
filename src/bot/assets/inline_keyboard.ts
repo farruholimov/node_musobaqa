@@ -93,11 +93,11 @@ const InlineKeyboards = {
                 `update_time?id=${times[7]['id']}&page=${page}`
             )
             .row()
-            .text('◀️', `my_times?page=${Number(page) ? Number(page) - 1 : 0}`)
+            .text('◀️', `my_times?page=${Number(page) ? Number(page) - 1 : 0}&day=${times[0]['day']}`)
             .text(`${page}/${countPage}`)
             .text(
                 '▶️',
-                `my_times?page=${Number(page) ? Number(page) + 1 : 0 + 1}`
+                `my_times?page=${Number(page) ? Number(page) + 1 : 0 + 1}&day=${times[0]['day']}`
             )
             .row()
             .text('Orqaga ↩️', `back?step=return_timetable`),

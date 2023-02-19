@@ -150,19 +150,16 @@ export default class MastersController {
         ctx,
         edit: boolean = false,
         query: { day: string, page: number},
-        page: number = 1
     ) => {
+        const page = query.page ? query.page : 1
         const master = await this.masterService.getByChatId(
             ctx.callbackQuery.message.chat.id
         );
         const {times,count: [{count}] } = await this.calendarsService.getAll({
             day: query.day,
             master_id: master.id,
+            page
         });
-
-        console.log(count);
-        
-        
 
         if (edit)
             await ctx.api.editMessageText(

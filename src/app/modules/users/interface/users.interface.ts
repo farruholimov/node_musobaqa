@@ -29,5 +29,4 @@ export interface IUser {
   chat_id: string;
   step: string;
   role_id?: number;
-
 }

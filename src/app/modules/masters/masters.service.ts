@@ -39,14 +39,14 @@ export default class MastersService {
     return this.mastersDao.deleteMasterByUser(user_id);
   }
 
-  getAll (query?) {
+  getAll (search?, query?) {
     const extractedQuery = extractQuery(query)
     const filters = extractedQuery.filters  
  
     const sorts = extractedQuery.sorts 
 
 
-    return this.mastersDao.getAll( filters, sorts);
+    return this.mastersDao.getAll(search, filters, sorts);
   } 
 
   async getByChatId (chat_id) { 

@@ -363,6 +363,17 @@ export default class TgBot {
                         console.log(error);
                     }
                     break;
+                case 'my_times':
+                    try {
+                        await this.mastersController.sendTimes(
+                            ctx,
+                            true,
+                            query
+                        );
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    break;
                 case 'chosen_services':
                     try {
                         await this.ordersController.sendUserOrders(ctx, true);

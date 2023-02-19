@@ -22,7 +22,7 @@ const InlineKeyboards = {
             .text("Ma'lumotlarni o'zgartirish", "edit_master_info"),
 
         user_menu: new InlineKeyboard()
-            .text("Xizmatlar", "services")
+            .text("Xizmatlar", "services?step=user_menu")
             .row()
             .text("Tanlangan xizmatlar", "chosen_services")
             .row()
@@ -115,11 +115,11 @@ const InlineKeyboards = {
             .row()
             .text("Orqaga ↩️", `back?step=${step}`),
 
-        user_sections: (sections, command) => {
+        user_sections: (sections, command, step) => {
             let menu = [
                 [{
                     text: "Orqaga",
-                    callback_data: `back?step=user_type&menu=user_roles_menu`
+                    callback_data: `back?step=${step}`
                 }]
             ]
             if (!sections.length) return menu

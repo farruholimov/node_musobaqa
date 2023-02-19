@@ -32,8 +32,6 @@ const messages = {
     noOrdersMsg: "Hozircha belgilangan xizmatlar yo'q.",
     switchedToAdminMsg: "✅ Administrator rejimiga o'tdingiz!",
     notAdminMsg: "❌ Siz administrator emassiz!",
-    youGotRejectedMsg: "❌ Siz administrator tomonidan tasdiqlanmadingiz!",
-    youGotAccepteddMsg: "✅ Siz administrator tomonidan tasdiqlandingiz!",
     orderFirstStep:
         "<b>Quyidagi saytdan kerakli mahsulotning rasmini (screenshot) yoki linkini yuboring.</b> \n----------------------------------------------------------------------\n 👉 https://telegra.ph/Aksessuarlar-03-07 👈\n----------------------------------------------------------------------\n\n<i>Mahsulotlarni yuborganingizdan so'ng davom etish uchun <b>Tasdiqlash</b> tugmasini bosing yoki buyurtma berishni to'xtatish uchun <b>Bekor qilish</b> tugmasini bosing.</i>",
     menuMsg: `📖 Asosiy menyu`,
@@ -42,7 +40,10 @@ const messages = {
     getDaysMessage: `Bir kunlik vaqtlarni olish uchun\nshu kunlardan birini tanlang 😊`,
     getTimessMessage: (date) =>
         `${date} ushbu sanadagi vaqtlarni oldingiz! Band qilish uchun\nyoki bo'shatish uchun vaqtni ustiga bosing 😊`,
-    masterNameMsg: "Ismni kiriting:",
+    amountMsg: "Miqdorni jo'nating:",
+    sizeMsg: "O'lchamni jo'nating:",
+    costMsg: 'Narxni kiriting:',
+    invalidNumberMsg: "Raqam noto'g'ri kiritilgan!",
 };
 
 export default messages;
